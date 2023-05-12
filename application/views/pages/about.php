@@ -27,7 +27,7 @@
 						</h2>
 					</div>
 					<p style="margin-top: 20px;margin-bottom: 30px;">
-						Vitae fugiat laboriosam officia perferendis provident aliquid voluptatibus dolorem, fugit ullam sit earum id eaque nisi hic? Tenetur commodi, nisi rem vel, ea eaque ab ipsa, autem similique ex unde!
+					Island Adventure Gear is a brand that provides outdoor activity equipment from Bali-Indonesia that meets various needs for equipment and equipment for the lifestyle of outdoor enthusiasts in tropical climates. To be the largest and most comprehensive supplier in BALI that can provide our customers' sports needs, especially today's adventure equipment
 					</p>
 					<!-- <a href="">
 						Shop Now

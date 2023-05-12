@@ -271,14 +271,14 @@
 				<div class="col-md-6 ml-auto">
 					<div class="heading_container remove_line_bt">
 						<h2>
-						#NewArrivals
+						The Biggest OutDoor Adventure Gear in Bali
 						</h2>
 					</div>
 					<p style="margin-top: 20px;margin-bottom: 30px;">
-						Vitae fugiat laboriosam officia perferendis provident aliquid voluptatibus dolorem, fugit ullam sit earum id eaque nisi hic? Tenetur commodi, nisi rem vel, ea eaque ab ipsa, autem similique ex unde!
+					Island Adventure Gear is a brand that provides outdoor activity equipment from Bali-Indonesia that meets various needs for equipment and equipment for the lifestyle of outdoor enthusiasts in tropical climates.
 					</p>
-					<a href="">
-						Shop Now
+					<a href="<?= base_url('Admin/product') ?>">
+						Ayo Berpetualang bersama Kami
 					</a>
 				</div>
 			</div>
