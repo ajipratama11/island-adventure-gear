@@ -128,9 +128,10 @@ class M_admin extends CI_Model
 	public function save_product()
 	{
 		$name = [strtoupper($this->input->post('product_name'))];
-		$konsonan = ['B', 'C', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'X', 'Y', 'Z'];
 		$pecahan_nama = explode(" ", $name[0]);
-		$kata1 = (explode(" ", $name[0])[0]);
-		
+		$kata = explode(" ", $name[0][0]);
+		$jml_kata = count($kata);
+		$max_code = $this->db->query("SELECT max(product_code)")->row();
+
 	}
 }
