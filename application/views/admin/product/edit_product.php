@@ -18,32 +18,33 @@
 		<div class="col-lg-12">
 			<div class="card mb-4">
 				<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-					<h6 class="m-0 font-weight-bold text-primary">Form Add Product</h6>
+					<h6 class="m-0 font-weight-bold text-primary">Form Edit Product</h6>
 				</div>
 				<div class="card-body">
-                	<form action="<?= base_url('Admin/save_product') ?>" method="post" enctype="multipart/form-data">
+                	<form action="<?= base_url('Admin/update_product') ?>" method="post" enctype="multipart/form-data">
 						<div class="form-group">
 							<label for="exampleInputEmail1">Product Name</label>
-							<input type="text" class="form-control" name="product_name" id="product_name" value="<?= set_value('product_name') ?>" placeholder="Enter Product Name" onkeyup="createTextSlug()">
+							<input type="hidden" name="id" value="<?= $edit->id ?>">
+							<input type="text" class="form-control" name="product_name" id="product_name" value="<?= $edit->product_name ?>" placeholder="Enter Product Name" onkeyup="createTextSlug()">
 							<?= form_error('product_name', '<small class="text-danger pl-3">', '</small>'); ?>
 						</div>
 						<div class="form-group">
 							<label for="exampleInputEmail1">Slug</label>
-							<input type="text" class="form-control" name="slug" id="slug" value="<?= set_value('slug') ?>" placeholder="" readonly>
+							<input type="text" class="form-control" name="slug" id="slug" value="<?= $edit->slug ?>" placeholder="" readonly>
 						</div>
 						<div class="form-group">
 							<label for="exampleInputEmail1">Stock</label>
-							<input type="number" class="form-control" name="stock" value="<?= set_value('stock') ?>" placeholder="Enter Stock">
+							<input type="number" class="form-control" name="stock" value="<?= $edit->stock ?>" placeholder="Enter Stock">
 							<?= form_error('stock', '<small class="text-danger pl-3">', '</small>'); ?>
 						</div>
 						<div class="form-group">
 							<label for="exampleInputEmail1">Price</label>
-							<input type="text" class="form-control" name="price" value="<?= set_value('price') ?>" id="currency-field" data-type="currency" placeholder="Enter Price">
+							<input type="text" class="form-control" name="price" value="<?= $edit->price ?>" id="currency-field" data-type="currency" placeholder="Enter Price">
 							<?= form_error('price', '<small class="text-danger pl-3">', '</small>'); ?>
 						</div>
 						<div class="form-group">
 							<label for="exampleInputEmail1">Description</label>
-							<textarea class="summernote" name="description"><?= set_value('description') ?></textarea>
+							<textarea class="summernote" name="description"><?= $edit->description ?></textarea>
 							<?= form_error('description', '<small class="text-danger pl-3">', '</small>'); ?>
 						</div>
 						<div class="form-group">
@@ -51,7 +52,9 @@
 							<select id="category_id" class="form-control" style="width: 100%" name="category_id">
 								<option></option>
 								<?php foreach($category as $value) { ?>
-									<option value="<?= $value->id ?>"><?= $value->name_category ?></option>
+									<option <?php if ($edit->category_id == $value->id) {
+												echo "selected=\"selected\"";
+											} ?> value="<?= $value->id ?>"><?= $value->name_category ?></option>
 								<?php } ?>
 							</select>
 							<?= form_error('category_id', '<small class="text-danger pl-3">', '</small>'); ?>
@@ -59,17 +62,27 @@
 						<div class="form-group">
 							<label for="exampleInputEmail1">Sub Category</label>
 							<select id="subcategory_id" class="form-control" style="width: 100%" name="subcategory_id">
-								<option></option>
+								<?php if(empty($edit->subcategory_id)) { ?>
+									<option></option>
+								<?php } else { ?>
+									<?php foreach($sub_category as $value) { ?>
+										<option <?php if ($edit->subcategory_id == $value->id) {
+												echo "selected=\"selected\"";
+											} ?> value="<?= $value->id ?>"><?= $value->name_subcategory ?></option>
+									<?php } ?>
+								<?php } ?>
 							</select>
 							<?= form_error('subcategory_id', '<small class="text-danger pl-3">', '</small>'); ?>
 							<!-- <img src="<?= base_url() ?>assets/image/loading.gif" width="35" id="load1" style="display:none;" /> -->
 						</div>
 						<div class="form-group">
 							<label>Image</label>
+							<input type="hidden" name="old_image" value="<?= $edit->image ?>">
 							<input type="file" name="image" class="form-control" accept="image/*" id="imgInp" placeholder="Full Name.">
 							<p>maximum size 3MB</p>
 							<?= form_error('image', '<small class="text-danger pl-3">', '</small>'); ?>
-							<img id="blah" class="mt-2 mb-3" height="200" width="200" src="#" alt="preview photo" />
+							<img class="mt-2 mb-3" height="200" width="200" src="<?= base_url('layouts/images/product/' . $edit->image) ?>" alt="" />
+							<img id="blah" class="mt-2 mb-3 ml-4" height="200" width="200" src="#" alt="preview photo" />
 						</div>
 						<hr>
 						<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>

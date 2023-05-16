@@ -37,7 +37,7 @@
 								<tr>
 									<td><?= $no++ ?></td>
 									<td><?= $value->payment_name ?></td>
-									<td><?= 'Rp. '. number_format($value->balance,2,',','.') ?></td>
+									<td><?= 'Rp. '. number_format($value->balance,0,',','.') ?></td>
 									<td>
 										<a href="#edit_payment" data-toggle="modal" class="badge bg-primary tombol-edit" data-id="<?= $value->id ?>" data-payment_name="<?= $value->payment_name ?>" data-balance="<?= $value->balance ?>" style="color: #fff" title="Edit"><i class="fa fa-edit"></i> Edit</a>
 										<a href="<?= base_url('Admin/delete_paymentMethods/' . $value->id) ?>" class="badge bg-danger tombol-hapus" style="color: #fff" title="delete"><i class="fa fa-trash"></i> Delete</a>

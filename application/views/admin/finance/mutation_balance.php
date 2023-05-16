@@ -40,7 +40,7 @@
 									<td><?= $no++ ?></td>
 									<td><?= $value->payment_name ?></td>
 									<td><?= $to->payment_name ?></td>
-									<td><?= 'Rp. '. number_format($value->nominal,2,',','.') ?></td>
+									<td><?= 'Rp. '. number_format($value->nominal,0,',','.') ?></td>
 									<td><?= date('d-m-Y', strtotime($value->date_mutation)) ?></td>
 								</tr>
 							<?php } ?>

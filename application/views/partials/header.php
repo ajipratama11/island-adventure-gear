@@ -56,7 +56,7 @@
         Transaction
       </div>
       <li class="nav-item <?php if($title == 'Transaction') {echo 'active';} else {echo '';} ?>">
-        <a class="nav-link" href="">
+        <a class="nav-link" href="<?= base_url('Admin/transaction') ?>">
           <i class="fas fa-fw fa-shopping-cart"></i>
           <span>Transaction</span>
         </a>
@@ -65,7 +65,7 @@
       <div class="sidebar-heading">
         Product
       </div>
-	  <li class="nav-item <?php if(($title == 'Product') || ($title == 'Product Photo')) {echo 'active';} else {echo '';} ?>">
+	  <li class="nav-item <?php if(($title == 'Product') || ($title == 'Product Photo') ||  ($title == 'Add Product') ||  ($title == 'Detail Product') ||  ($title == 'Edit Product')) {echo 'active';} else {echo '';} ?>">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProduct" aria-expanded="true"
           aria-controls="collapseProduct">
           <i class="fas fa-fw fa-cube"></i>
@@ -75,7 +75,7 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <!-- <h6 class="collapse-header">Example Pages</h6> -->
             <a class="collapse-item" href="<?= base_url('Admin/product') ?>">Product</a>
-            <a class="collapse-item" href="register.html">Product Photo</a>
+            <a class="collapse-item" href="<?= base_url('Admin/product_photo') ?>">Product Photo</a>
           </div>
         </div>
       </li>

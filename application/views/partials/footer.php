@@ -30,6 +30,7 @@
 	<script src="<?= base_url() ?>layouts/js/summernote/js/summernote.min.js"></script>
 	<!-- Summernote init -->
 	<script src="<?= base_url() ?>layouts/js/plugin/summernote-init.js"></script>
+	<script src="<?= base_url() ?>layouts/js/sprintf.js"></script>
 
   <!-- Page level custom scripts -->
   	<script>

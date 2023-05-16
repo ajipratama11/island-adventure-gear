@@ -7,6 +7,7 @@ class Admin extends CI_Controller {
     {
         parent::__construct();
 		$this->load->model('M_admin', 'models');
+		$this->load->library('form_validation');
 		date_default_timezone_set('Asia/Jakarta');
 		if (empty($this->session->userdata('id'))) {
             $this->session->set_flashdata('login_dulu', true);
@@ -148,7 +149,23 @@ class Admin extends CI_Controller {
 
 	public function save_product()
 	{
-		$this->models->save_product();
+		$this->form_validation->set_rules('product_name', 'product name', 'required|trim', ['required' => 'product name is required']);
+		$this->form_validation->set_rules('stock', 'stock', 'required|trim', ['required' => 'stock is required']);
+		$this->form_validation->set_rules('price', 'harga', 'required|trim', ['required' => 'price is required']);
+		$this->form_validation->set_rules('description', 'deskripsi', 'required|trim', ['required' => 'description is required']);
+		$this->form_validation->set_rules('category_id', 'ketegori', 'required|trim', ['required' => 'category is required']);
+		if (empty($_FILES['image']['name']))
+		{
+			$this->form_validation->set_rules('image', 'Image', 'required', ['required' => 'image is required']);
+		}
+		if ($this->form_validation->run() == false) {
+            $this->add_product();
+        } else {
+			$this->models->save_product();
+			$this->session->set_flashdata('success_insert', true);
+			redirect('Admin/product');
+		}	
+
 	}
 
 	public function sub_categoryAjax()
@@ -163,6 +180,105 @@ class Admin extends CI_Controller {
 			}
 			exit;
 		}
+	}
+
+	public function detail_product($slug)
+	{
+		$var['title'] = 'Detail Product';
+		$var['value'] = $this->models->get_detailProduct($slug);
+		$var['category'] = $this->models->get_category();
+		$this->load->view('admin/product/detail_product', $var);
+	}
+
+	public function edit_product($slug)
+	{
+		$var['title'] = 'Edit Product';
+		$var['edit'] = $this->models->get_detailProduct($slug);
+		$var['category'] = $this->models->get_category();
+		$var['sub_category'] = $this->models->get_subCategory();
+		$this->load->view('admin/product/edit_product', $var);
+	}
+
+	public function update_product()
+	{
+		$slug = $this->input->post('slug');
+		$this->form_validation->set_rules('product_name', 'product name', 'required|trim', ['required' => 'product name is required']);
+		$this->form_validation->set_rules('stock', 'stock', 'required|trim', ['required' => 'stock is required']);
+		$this->form_validation->set_rules('price', 'harga', 'required|trim', ['required' => 'price is required']);
+		$this->form_validation->set_rules('description', 'deskripsi', 'required|trim', ['required' => 'description is required']);
+		$this->form_validation->set_rules('category_id', 'ketegori', 'required|trim', ['required' => 'category is required']);
+		if ($this->form_validation->run() == false) {
+            $this->edit_product($slug);
+        } else {
+			$this->models->update_product();
+			$this->session->set_flashdata('success_update', true);
+			redirect('Admin/product');
+		}
+	}
+
+	public function add_stock()
+	{
+		$id = $this->input->post('id');
+		$stock = $this->input->post('stock');
+		$this->db->query("UPDATE `product` SET `stock`=stock+'$stock' WHERE id='$id'");
+		$this->session->set_flashdata('success_addition_stock', true);
+		redirect('Admin/product');
+	}
+
+	public function delete_product($id)
+	{
+		$this->delete_image_product($id);
+		$this->db->delete('product', ['id' => $id]);
+		$this->session->set_flashdata('success_delete', true);
+		redirect('Admin/product');
+	}
+
+	private function delete_image_product($id)
+	{
+		$image = $this->db->get_where('product', ['id' => $id])->row();
+        if ($image->image != "01.jpg") {
+            $filename = explode(".", $image->image)[0];
+            return array_map('unlink', glob(FCPATH . "/layouts/images/product/$filename.*"));
+        }
+	}
+
+	public function product_photo()
+	{
+		$var['title'] = 'Product Photo';
+		$var['photo'] = $this->models->get_productPhoto();
+		$var['product'] = $this->models->get_product();
+		$this->load->view('admin/product/product_photo', $var);
+	}
+
+	public function save_productPhoto()
+	{
+		$this->models->save_productPhoto();
+		$this->session->set_flashdata('success_insert', true);
+		redirect('Admin/product_photo');
+	}
+
+	public function update_productPhoto()
+	{
+		$this->models->update_productPhoto();
+		$this->session->set_flashdata('success_update', true);
+		redirect('Admin/product_photo');
+	}
+
+	public function delete_productPhoto($id)
+	{
+		$this->delete_product_photo($id);
+		$this->db->delete('product_photo', ['id' => $id]);
+		$this->session->set_flashdata('success_delete', true);
+		redirect('Admin/product_photo');
+	}
+
+	public function delete_product_photo($id)
+	{
+		$photo = $this->db->get_where('product_photo', ['id' => $id])->row();
+        if ($photo->photo != "01.jpg") {
+            $filename = explode(".", $photo->photo)[0];
+            return array_map('unlink', glob(FCPATH . "/layouts/images/product_photo/$filename.*"));
+        }
 	}
 
 	//payment / finance
@@ -247,6 +363,56 @@ class Admin extends CI_Controller {
 			redirect('Admin/mutation_balance');
 		}
 
+	}
+
+	//Transaction
+	public function transaction()
+	{
+		$var['title'] = 'Transaction';
+		$var['transaction'] = $this->models->get_transaction();
+		$this->load->view('admin/menu/transaction', $var);
+	}
+
+	public function add_transaction()
+	{
+		$var['title'] = 'Add Transaction';
+		$var['payment'] = $this->models->get_paymentMethods();
+		$this->load->view('admin/menu/add_transaction', $var);
+	}
+
+	public function max_transCode()
+	{
+		$data = $this->models->max_transCode()->row();
+        $json['maxs'] = @$data->maxs;
+        echo json_encode($json);
+	}
+
+	public function ajax_detail_produk($nomor)
+	{
+		$list = $this->models->get_datatablesid();
+        $data = array();
+        $no = $_REQUEST['start'];
+        foreach ($list as $orde) {
+
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $orde->product_name;
+            $row[] = $orde->price;
+            $row[] = '<img src="'. base_url('layouts/images/product/'. $orde->image).'" width="100">';
+
+            $row[] = ' <button type="button" class="btn btn-primary "onclick="pencarian_produk(\'' . $orde->id . '\',\'' . $orde->product_name . '\',\'' . $orde->price . '\',\'' . $orde->image . '\',\'' . $nomor . '\')">Pilih</button>';
+
+
+            $data[] = $row;
+        }
+        $output = array(
+            "draw" => $_REQUEST['draw'],
+            "recordsTotal" => $this->models->count_allid(),
+            "recordsFiltered" => $this->models->count_filteredid(),
+            "data" => $data,
+        );
+        echo json_encode($output);
 	}
 
 }

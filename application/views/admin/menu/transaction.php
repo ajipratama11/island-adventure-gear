@@ -11,14 +11,14 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-6 mb-3">
-			<a href="<?= base_url('Admin/add_product') ?>" class="btn btn-primary btn-sm col-md-3"><i class="fa fa-plus-circle"></i> Add Product</a>
+			<a href="<?= base_url('Admin/add_transaction') ?>" class="btn btn-primary btn-sm col-md-3"><i class="fa fa-plus-circle"></i> Add Transaction</a>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="card mb-4">
 				<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-					<h6 class="m-0 font-weight-bold text-primary">List Product</h6>
+					<h6 class="m-0 font-weight-bold text-primary">List Transaction</h6>
 				</div>
 				<div class="table-responsive p-3">
 					<table class="table align-items-center table-flush table-hover" id="dataTableHover">
@@ -26,30 +26,32 @@
 							<tr>
 								<th>No</th>
 								<th>Code</th>
-								<th>Product Name</th>
-								<th>Stock</th>
-								<th>Price</th>
-								<th>Category</th>
-								<th>Image</th>
+								<th>Customer</th>
+								<th>Date</th>
+								<th>Total Qty</th>
+								<th>Total Transaction</th>
+								<th>Discount</th>
+								<th>Total Payment</th>
+								<th>Payment Methods</th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php 
 							$no = 1;
-							foreach($product as $value) { ?>
+							foreach($transaction as $value) { ?>
 								<tr>
 									<td><?= $no++ ?></td>
-									<td><?= $value->product_code ?></td>
-									<td><?= $value->product_name ?></td>
-									<td><?= $value->stock ?></td>
-									<td><?= 'Rp. '. number_format($value->price,0,',','.') ?></td>
-									<td><?= $value->name_category ?></td>
-									<td><img src="<?= base_url('layouts/images/product/' . $value->image) ?>" width="70"></td>
+									<td><?= $value->code_trans ?></td>
+									<td><?= $value->name_customer ?></td>
+									<td><?= date('d-m-Y', strtotime($value->stock)) ?></td>
+									<td><?= $value->totally_qty ?></td>
+									<td><?= 'Rp. '. number_format($value->transaction_total,2,',','.') ?></td>
+									<td><?= 'Rp. '. number_format($value->discount,2,',','.') ?></td>
+									<td><?= 'Rp. '. number_format($value->totally_payment,2,',','.') ?></td>
+									<td><span class="badge bg-primary"><?= $value->name_category ?></span></td>
 									<td>
 										<a href="<?= base_url('Admin/detail_product/' . $value->slug) ?>" class="badge bg-success" style="color: #fff" title="detail product"><i class="fa fa-eye"></i></a> 
-										<a href="#add_stock" data-toggle="modal" data-id="<?= $value->id ?>" class="badge bg-info tombol-stok" style="color: #fff" title="add stock"><i class="fa fa-plus-circle"></i></a> 
-										<a href="<?= base_url('Admin/edit_product/' . $value->slug) ?>" class="badge bg-primary tombol-edit" style="color: #fff" title="Edit"><i class="fa fa-edit"></i></a> 
 										<a href="<?= base_url('Admin/delete_product/' . $value->id) ?>" class="badge bg-danger tombol-hapus" style="color: #fff" title="delete"><i class="fa fa-trash"></i></a>
 									</td>
 								</tr>
@@ -90,10 +92,6 @@
 <?php $this->load->view('partials/footer.php'); ?>
 <script>
 	$(document).ready(function() {
-		$(document).on('click', '.tombol-stok', function(){
-			let id = $(this).attr('data-id');
-			$('#id').val(id);
-		})
 
 
 		$('.tombol-hapus').on('click', function(e) {
