@@ -55,7 +55,7 @@
       <div class="sidebar-heading">
         Transaction
       </div>
-      <li class="nav-item <?php if($title == 'Transaction') {echo 'active';} else {echo '';} ?>">
+      <li class="nav-item <?php if(($title == 'Transaction') || ($title == 'Add Transaction') || ($title == 'Detail Transaction')) {echo 'active';} else {echo '';} ?>">
         <a class="nav-link" href="<?= base_url('Admin/transaction') ?>">
           <i class="fas fa-fw fa-shopping-cart"></i>
           <span>Transaction</span>
@@ -128,7 +128,7 @@
         </div>
       </li>
 	  <li class="nav-item">
-        <a class="nav-link" href="">
+        <a class="nav-link <?php if($title == 'Transaction Report') {echo 'active';} else {echo '';} ?>" href="<?= base_url('Admin/transaction_report') ?>">
           <i class="fas fa-fw fa-book"></i>
           <span>Transaction Report</span>
         </a>
@@ -138,7 +138,7 @@
         Other
       </div>
 	  <li class="nav-item">
-        <a class="nav-link" href="">
+        <a class="nav-link <?php if(($title == 'Article') || ($title == 'Edit Article')) {echo 'active';} else {echo '';} ?>" href="<?= base_url('Admin/article') ?>">
           <i class="fas fa-fw fa-newspaper"></i>
           <span>Article</span>
         </a>

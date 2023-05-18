@@ -272,7 +272,7 @@ class M_admin extends CI_Model
 		$query = $this->db->select('transaction.*, payment_methods.payment_name')
 						->from('transaction')
 						->join('payment_methods', 'transaction.payment_methods_id = payment_methods.id')
-						->order_by('transaction.date_trans', 'desc')
+						->order_by('transaction.id', 'desc')
 						->get()->result();
 		return $query;
 	}
@@ -301,6 +301,7 @@ class M_admin extends CI_Model
     {
         $this->db->select('*');
         $this->db->from("product a");
+		$this->db->where("stock !=", 0);
         $i = 0;
 
 
@@ -346,4 +347,219 @@ class M_admin extends CI_Model
         $this->db->from('product');
         return $this->db->count_all_results();
     }
+
+	public function get_detailTransaction($code)
+	{
+		$query = $this->db->select('transaction.*, payment_methods.payment_name')
+						->from('transaction')
+						->join('payment_methods', 'transaction.payment_methods_id = payment_methods.id')
+						->order_by('transaction.date_trans', 'desc')
+						->where('transaction.code_trans', $code)
+						->get()->row();
+		return $query;
+	}
+
+	public function get_productTrans($code)
+	{
+		$query = $this->db->select('detail_transaction.*, product.product_name')
+						->from('detail_transaction')
+						->join('product', 'detail_transaction.product_id = product.id')
+						->where('detail_transaction.trans_code', $code)
+						->get()->result();
+		return $query;
+	}
+
+	public function get_article()
+	{
+		return $this->db->get('article')->result();
+	}
+
+	public function save_article()
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		$post = $this->input->post();
+		$this->title = $post['title'];
+		$this->slug = $post['slug'];
+		$this->topic_article = $post['topic_article'];
+		$this->date = date('Y-m-d');
+		$this->description = $post['description'];
+		$this->author = $post['author'];
+		$this->images = $this->upload_imageArticle();
+		$this->db->insert('article', $this);
+	}
+
+	public function update_article()
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		$post = $this->input->post();
+		$id = $post['id'];
+		$this->title = $post['title'];
+		$this->slug = $post['slug'];
+		$this->topic_article = $post['topic_article'];
+		$this->date = date('Y-m-d');
+		$this->description = $post['description'];
+		$this->author = $post['author'];
+		if (!empty($_FILES["images"]["name"])) {
+            $this->images = $this->upload_imageArticle();
+        } else {
+            $this->images = $post["old_image"];
+        }
+		$this->db->update('article', $this, ['id' => $id]);
+	}
+
+	private function upload_imageArticle()
+	{
+		$config['upload_path']          = './layouts/images/article/';
+        $config['allowed_types']        = 'gif|jpg|png|jpeg';
+        $nama_lengkap = $_FILES['images']['name'];
+        $config['file_name']            = $nama_lengkap;
+        $config['overwrite']            = true;
+        $config['max_size']             = 3024;
+
+        $this->upload->initialize($config);
+        $this->load->library('upload', $config);
+
+        if ($this->upload->do_upload('images')) {
+            return $this->upload->data("file_name");
+        }
+        print_r($this->upload->display_errors());
+	}
+
+	public function get_transactionAmount()
+	{
+		$query = $this->db->from('transaction')->count_all_results();
+		return $query;
+	}
+
+	public function get_transactionAmount2($start_date, $end_date)
+	{
+		$query = $this->db->from('transaction')
+						->where('date_trans >=', $start_date)
+						->where('date_trans <=', $start_date)
+						->count_all_results();
+		return $query;
+	}
+
+	public function get_transactionTotal()
+	{
+		$query = $this->db->select('SUM(transaction_total) as total_transaction')
+						->get('transaction')->row()->total_transaction;
+		return $query;
+	}
+
+	public function get_transactionTotal2($start_date, $end_date)
+	{
+		$query = $this->db->select('SUM(transaction_total) as total_transaction')
+						->where('date_trans >=', $start_date)
+						->where('date_trans <=', $start_date)
+						->get('transaction')->row()->total_transaction;
+		return $query;
+	}
+
+	public function get_transactionDiscount()
+	{
+		$query = $this->db->select('SUM(discount) as discount')
+						->get('transaction')->row()->discount;
+		return $query;
+	}
+
+	public function get_transactionDiscount2($start_date, $end_date)
+	{
+		$query = $this->db->select('SUM(discount) as discount')
+						->where('date_trans >=', $start_date)
+						->where('date_trans <=', $start_date)
+						->get('transaction')->row()->discount;
+		return $query;
+	}
+
+	public function get_transactionPayment()
+	{
+		$query = $this->db->select('SUM(totally_payment) as totally_payment')
+						->get('transaction')->row()->totally_payment;
+		return $query;
+	}
+
+	public function get_transactionPayment2($start_date, $end_date)
+	{
+		$query = $this->db->select('SUM(totally_payment) as totally_payment')
+						->where('date_trans >=', $start_date)
+						->where('date_trans <=', $start_date)
+						->get('transaction')->row()->totally_payment;
+		return $query;
+	}
+
+	public function get_transaction2($start_date, $end_date)
+	{
+		$query = $this->db->select('transaction.*, payment_methods.payment_name')
+						->from('transaction')
+						->join('payment_methods', 'transaction.payment_methods_id = payment_methods.id')
+						->where('date_trans >=', $start_date)
+						->where('date_trans <=', $start_date)
+						->order_by('transaction.id', 'desc')
+						->get()->result();
+		return $query;
+	}
+
+	public function get_productAmount()
+	{
+		$query = $this->db->from('product')->count_all_results();
+		return $query;
+	}
+
+	public function get_customerAmount()
+	{
+		$query = $this->db->distinct()->select('name_customer')->from('transaction')->count_all_results();
+		return $query;
+	}
+
+	public function grafik_pengunjung()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $tahun = date('Y');
+        $bc = $this->db->query("
+        SELECT
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=01)AND (YEAR(date_trans)='$tahun'))),0) AS `Januari`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=02)AND (YEAR(date_trans)='$tahun'))),0) AS `Februari`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=03)AND (YEAR(date_trans)='$tahun'))),0) AS `Maret`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=04)AND (YEAR(date_trans)='$tahun'))),0) AS `April`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=05)AND (YEAR(date_trans)='$tahun'))),0) AS `Mei`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=06)AND (YEAR(date_trans)='$tahun'))),0) AS `Juni`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=07)AND (YEAR(date_trans)='$tahun'))),0) AS `Juli`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=08)AND (YEAR(date_trans)='$tahun'))),0) AS `Agustus`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=09)AND (YEAR(date_trans)='$tahun'))),0) AS `September`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=10)AND (YEAR(date_trans)='$tahun'))),0) AS `Oktober`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=11)AND (YEAR(date_trans)='$tahun'))),0) AS `November`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=12)AND (YEAR(date_trans)='$tahun'))),0) AS `Desember`
+            from transaction GROUP BY YEAR(date_trans) 
+        ");
+        return $bc;
+    }
+
+    public function filter_grafik_pengunjung()
+    {
+        date_default_timezone_set('Asia/Jakarta');
+        $tahun = $this->input->get('tahun');
+        $bc = $this->db->query("
+        SELECT
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=01)AND (YEAR(date_trans)='$tahun'))),0) AS `Januari`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=02)AND (YEAR(date_trans)='$tahun'))),0) AS `Februari`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=03)AND (YEAR(date_trans)='$tahun'))),0) AS `Maret`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=04)AND (YEAR(date_trans)='$tahun'))),0) AS `April`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=05)AND (YEAR(date_trans)='$tahun'))),0) AS `Mei`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=06)AND (YEAR(date_trans)='$tahun'))),0) AS `Juni`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=07)AND (YEAR(date_trans)='$tahun'))),0) AS `Juli`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=08)AND (YEAR(date_trans)='$tahun'))),0) AS `Agustus`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=09)AND (YEAR(date_trans)='$tahun'))),0) AS `September`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=10)AND (YEAR(date_trans)='$tahun'))),0) AS `Oktober`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=11)AND (YEAR(date_trans)='$tahun'))),0) AS `November`,
+            ifnull((SELECT sum(transaction_total) FROM (transaction)WHERE((Month(date_trans)=12)AND (YEAR(date_trans)='$tahun'))),0) AS `Desember`
+            from transaction GROUP BY YEAR(date_trans) 
+        ");
+        return $bc;
+    }
+
+	public function get_productHome()
+	{
+		
+	}
 }

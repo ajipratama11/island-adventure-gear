@@ -21,7 +21,7 @@
 					<h6 class="m-0 font-weight-bold text-primary">List Balance Mutation</h6>
 				</div>
 				<div class="table-responsive p-3">
-					<table class="table align-items-center table-flush table-hover" id="dataTableHover">
+					<table class="table align-items-center table-flush table-hover" style="width: 100%" id="dataTableHover">
 						<thead class="thead-light" style="background-color: #0077b6">
 							<tr>
 								<th>No</th>

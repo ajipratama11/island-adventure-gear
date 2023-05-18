@@ -40,6 +40,7 @@ class Auth extends CI_Controller {
 				$data = [
 					'id' => $user['id'],
 					'email' => $user['email'],
+					'full_name' => $user['full_name'],
 					'picture' => $user['picture'],
 				];
 				$this->session->set_userdata($data);
@@ -58,6 +59,7 @@ class Auth extends CI_Controller {
 	{
 		$this->session->unset_userdata('id');
         $this->session->unset_userdata('email');
+        $this->session->unset_userdata('full_name');
         $this->session->unset_userdata('picture');
         $this->session->set_flashdata('logout', true);
         redirect('Auth');

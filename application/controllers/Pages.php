@@ -13,6 +13,7 @@ class Pages extends CI_Controller {
 	public function index()
 	{
 		$var['title'] = 'Home';
+		$var['product'] = $this->models->get_productHome();
 		$this->load->view('pages/index', $var);
 	}
 

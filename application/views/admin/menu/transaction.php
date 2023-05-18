@@ -21,7 +21,7 @@
 					<h6 class="m-0 font-weight-bold text-primary">List Transaction</h6>
 				</div>
 				<div class="table-responsive p-3">
-					<table class="table align-items-center table-flush table-hover" id="dataTableHover">
+					<table class="table align-items-center table-flush table-hover" style="width: 100%" id="dataTableHover">
 						<thead class="thead-light" style="background-color: #0077b6">
 							<tr>
 								<th>No</th>
@@ -44,47 +44,26 @@
 									<td><?= $no++ ?></td>
 									<td><?= $value->code_trans ?></td>
 									<td><?= $value->name_customer ?></td>
-									<td><?= date('d-m-Y', strtotime($value->stock)) ?></td>
+									<td><?= date('d-m-Y', strtotime($value->date_trans)) ?></td>
 									<td><?= $value->totally_qty ?></td>
-									<td><?= 'Rp. '. number_format($value->transaction_total,2,',','.') ?></td>
-									<td><?= 'Rp. '. number_format($value->discount,2,',','.') ?></td>
-									<td><?= 'Rp. '. number_format($value->totally_payment,2,',','.') ?></td>
-									<td><span class="badge bg-primary"><?= $value->name_category ?></span></td>
+									<td><?= 'Rp. '. number_format($value->transaction_total,0,',','.') ?></td>
+									<td><?= 'Rp. '. number_format($value->discount,0,',','.') ?></td>
+									<td><?= 'Rp. '. number_format($value->totally_payment,0,',','.') ?></td>
+									<td><span class="badge bg-primary" style="color: #FFF;"><?= $value->payment_name ?></span></td>
 									<td>
-										<a href="<?= base_url('Admin/detail_product/' . $value->slug) ?>" class="badge bg-success" style="color: #fff" title="detail product"><i class="fa fa-eye"></i></a> 
-										<a href="<?= base_url('Admin/delete_product/' . $value->id) ?>" class="badge bg-danger tombol-hapus" style="color: #fff" title="delete"><i class="fa fa-trash"></i></a>
+										<a href="<?= base_url('Admin/detail_transaction/' . $value->code_trans) ?>" class="badge bg-success" style="color: #fff" title="detail transaction"><i class="fa fa-eye"></i></a> 
+										<?php date_default_timezone_set('Asia/Jakarta');
+										$date_now = date('Y-m-d');
+										if($value->date_trans == $date_now) { ?>
+											<a href="<?= base_url('Admin/print_invoice/' . $value->code_trans) ?>" class="badge bg-primary" style="color: #fff" title="print invoice"><i class="fa fa-file-invoice"></i></a> 
+											<a href="<?= base_url('Admin/delete_transaction/' . $value->id) ?>" class="badge bg-danger tombol-hapus" style="color: #fff" title="delete"><i class="fa fa-trash"></i></a>
+										<?php } ?>
 									</td>
 								</tr>
 							<?php } ?>
 						</tbody>
 					</table>
 				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade" id="add_stock" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Add Stock</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body">
-				<form action="<?= base_url('Admin/add_stock') ?>" method="post">
-					<div class="form-group">
-						<label for="exampleInputEmail1">Additional Stock</label>
-						<input type="hidden" id="id" name="id">
-						<input type="number" class="form-control" name="stock" id="stock" placeholder="">
-					</div>
-					<hr>
-					<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> Save</button>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-close"></i> Close</button>
 			</div>
 		</div>
 	</div>
@@ -100,7 +79,7 @@
 
 			Swal.fire({
 				title: 'Are You Sure ?',
-				text: "This product will be deleted!",
+				text: "This transaction will be deleted!",
 				icon: 'warning',
 				showCancelButton: true,
 				confirmButtonColor: '#d33',
@@ -119,23 +98,7 @@
         Swal.fire({
             icon: 'success',
             title: 'Success!',
-            text: 'product saved successfully!',
-            showConfirmButton: true,
-            // timer: 1500
-        })
-    <?php elseif ($this->session->flashdata('success_update')) : ?>
-        Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'product updated successfully!',
-            showConfirmButton: true,
-            // timer: 1500
-        })
-    <?php elseif ($this->session->flashdata('success_addition_stock')) : ?>
-        Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'stock added successfully!',
+            text: 'Transaction saved successfully!',
             showConfirmButton: true,
             // timer: 1500
         })
@@ -144,7 +107,7 @@
 		Swal.fire({
 			icon: 'success',
 			title: 'Success!',
-			text: 'product deleted successfully!',
+			text: 'Transaction deleted successfully!',
 			showConfirmButton: true,
 			// timer: 1500
 		})

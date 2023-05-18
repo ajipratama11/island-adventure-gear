@@ -36,7 +36,9 @@
   	<script>
 		$(document).ready(function () {
 			$('#dataTable').DataTable(); // ID From dataTable 
-			$('#dataTableHover').DataTable(); // ID From dataTable with Hover
+			$('#dataTableHover').DataTable({
+				scrollX: true,
+			}); // ID From dataTable with Hover
 		});
 	</script>
 </body>

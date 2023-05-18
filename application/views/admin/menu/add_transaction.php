@@ -21,7 +21,7 @@
 					<h4 class="card-title">Form Transaction</h4>
 				</div>
 				<div class="card-body">
-					<form action="<?= base_url('Admin/save_transaction') ?>" method="POST">
+					<form action="<?= base_url('Admin/save_transaction') ?>" method="POST" name="add_transaction">
 						<div class="row">
 							<div class="col-md-4">
 								<label for="">Transaction Code</label>
@@ -29,7 +29,7 @@
 									<div class="input-group-prepend">
 										<span class="input-group-text" id="basic-addon1"><span class="fas fa-credit-card"></span> </span>
 									</div>
-									<input type="text" name="kd_trans" id="kd_trans" class="form-control kd_trans" readonly>
+									<input type="text" name="code_trans" id="code_trans" class="form-control code_trans" readonly>
 								</div>
 							</div>
 							<div class="col-md-4">
@@ -46,12 +46,12 @@
 								</div>
 							</div>
 							<div class="col-md-4">
-								<label for="">Customer</label>
+								<label for="">Customer Name</label>
 								<div class="input-group mb-3">
 									<div class="input-group-prepend">
 										<span class="input-group-text" id="basic-addon1"><span class="fas fa-user"></span> </span>
 									</div>
-									<input type="text" name="customer" id="customer" class="form-control customer" required>
+									<input type="text" name="name_customer" id="customer" class="form-control customer" required>
 								</div>
 							</div>
 							<div class="col-md-4">
@@ -60,7 +60,7 @@
 									<div class="input-group-prepend">
 										<span class="input-group-text" id="basic-addon1"><span class="fas fa-location-dot"></span> </span>
 									</div>
-									<input type="text" name="address" id="address" class="form-control address" required>
+									<input type="text" name="address_customer" id="address" class="form-control address" required>
 								</div>
 							</div>
 							<div class="col-md-4">
@@ -104,7 +104,7 @@
 							<div class="col-auto ml-auto">
 							</div>
 							<div class="col-auto ml-auto mt-3">
-								<h4 class="total" style="color: orange;">Transaksi Total : <span id='total_transaksi2'>0</span> &nbsp; <span class='color-blue' style="color: blue;"> Payment Total : </ span><span id='total_pembayaran2'>0</span> </h4>
+								<h4 class="total" style="color: orange;">Transaction Total : <span id='total_transaksi2'>0</span> &nbsp; <span class='color-blue' style="color: blue;"> Payment Total : </ span><span id='total_pembayaran2'>0</span> </h4>
 							</div>
 						</div>
 						<hr>
@@ -122,7 +122,7 @@
 							<div class="col-md-3">
 								<label for="">Discount</label>
 								<div class="input-group mb-3">
-									<input type="number" name="discount" class="form-control discount" id='discount'>
+									<input type="number" name="discount" class="form-control discount" id='discount' required>
 								</div>
 							</div>
 
@@ -194,6 +194,36 @@
 		placeholder: 'Choose Payment Methods',
 	});
 
+	$(function() {
+		$("form[name='add_transaction']").validate({
+			rules: {
+				name_customer: {
+					required: true
+				},
+				address_customer: {
+					required: true
+				},
+				no_telp_customer: {
+					required: true
+				}
+			},
+			messages: {
+				name_customer: {
+					required: "customer name is required (customer name harus di isi)"
+				},
+				address_customer: {
+					required: "address is required (address harus di isi)"
+				},
+				no_telp_customer: {
+					required: "whatsapp is required (whatsapp harus di isi)"
+				}
+			},
+			submitHandler: function(form) {
+				form.submit();
+			}
+		});
+	});
+
 	$(document).ready(function() {
 
 		 //detail_barang();
@@ -232,7 +262,7 @@
 
                 var kd_trans = 'IAG' + '' + y + '' + m + '' + d + '-' + kodene;
                 // console.log('invoice', invoice);
-                $('#kd_trans').val(kd_trans);
+                $('#code_trans').val(kd_trans);
             }
         });
 
@@ -291,7 +321,7 @@
 
         //1
         baris += "<td>";
-        baris += "<input autocomplete='off' required  type='text' class='form-control name_product" + nomor + "' name='name_product[]'><input type='hidden' name='product_id[]' class='form-control product_id"+ nomor +"'>";
+        baris += "<input autocomplete='off' required  type='text' class='form-control product_name" + nomor + "' name='product_name[]'><input type='hidden' name='product_id[]' class='form-control product_id"+ nomor +"'>";
         baris += "</td>";
 
 		baris += "<td><button type='button' class='btn-sm btn-primary' onclick='detail_product(" + nomor + ")' style='margin-left: 4px;'> <i class='ace-icon fa fa-search'></i></button></td>";
@@ -316,4 +346,187 @@
 		$('#tabeltransaksi').append(baris);
 	}
 
+	function pencarian_produk(id, product_name, price, image, nomor) {
+		$('.product_id' + nomor).val(id);
+		$('.product_name' + nomor).val(product_name);
+		$('.price' + nomor).val(price);
+		$('.image' + nomor).attr('src', '<?php echo base_url('layouts/images/product/') ?>'+image);
+        $('#listproduct').modal('hide');
+	}
+
+	$(document).on('keyup', '#qty', function() {
+        var Indexnya = $(this).parent().parent().index();
+        var Qty = $('#tabeltransaksi tbody tr:eq(' + Indexnya + ') td:nth-child(4) input#qty').val();
+        var Price = $('#tabeltransaksi tbody tr:eq(' + Indexnya + ') td:nth-child(5) input#price').val();
+
+        var SubTotal = parseInt(Price) * parseInt(Qty); 
+		// - parseInt(Potongan);
+        if (SubTotal > 0) {
+            var SubTotalVal = SubTotal;
+            SubTotal = to_rupiah(SubTotal);
+        } else {
+            SubTotal = '';
+            var SubTotalVal = 0;
+        }
+
+        var SubTotal2 = parseInt(Price) * parseInt(Qty); 
+		// - parseInt(Potongan);
+        if (SubTotal2 > 0) {
+            var SubTotalVal2 = SubTotal2;
+            SubTotal2 = to_rupiah(SubTotal2);
+        } else {
+            SubTotal2 = '';
+            var SubTotalVal2 = 0;
+        }
+        $('#tabeltransaksi tbody tr:eq(' + Indexnya + ') td:nth-child(7) input#subtotal').val(SubTotalVal);
+        $('#tabeltransaksi tbody tr:eq(' + Indexnya + ') td:nth-child(7) span').html(SubTotal2);
+        // console.log(SubTotal);
+        // console.log(SubTotal2);
+        HitungTotalBayar();
+    })
+
+    $(document).on('keyup', '#price', function() {
+        var Indexnya = $(this).parent().parent().index();
+        var Qty = $('#tabeltransaksi tbody tr:eq(' + Indexnya + ') td:nth-child(4) input#qty').val();
+        var Price = $('#tabeltransaksi tbody tr:eq(' + Indexnya + ') td:nth-child(5) input#price').val();
+
+        var SubTotal = parseInt(Price) * parseInt(Qty); 
+		//- parseInt(Potongan);
+        if (SubTotal > 0) {
+            var SubTotalVal = SubTotal;
+            SubTotal = to_rupiah(SubTotal);
+        } else {
+            SubTotal = '';
+            var SubTotalVal = 0;
+        }
+
+        var SubTotal2 = parseInt(Price) * parseInt(Qty); 
+		//- parseInt(Potongan);
+        if (SubTotal2 > 0) {
+            var SubTotalVal2 = SubTotal2;
+            SubTotal2 = to_rupiah(SubTotal2);
+        } else {
+            SubTotal2 = '';
+            var SubTotalVal2 = 0;
+        }
+        $('#tabeltransaksi tbody tr:eq(' + Indexnya + ') td:nth-child(7) input#subtotal').val(SubTotalVal);
+        $('#tabeltransaksi tbody tr:eq(' + Indexnya + ') td:nth-child(7) span').html(SubTotal2);
+        // console.log(SubTotal);
+        // console.log(SubTotal2);
+        HitungTotalBayar();
+    })
+
+	function HitungTotalBayar() {
+        var Total = 0;
+        var TotalTransaksi = 0;
+        $('#tabeltransaksi tbody tr').each(function() {
+            if ($(this).find('td:nth-child(7) input#subtotal').val() > 0) {
+                var SubTotal = $(this).find('td:nth-child(7) input#subtotal').val();
+                Total = parseInt(Total) + parseInt(SubTotal);
+            }
+        });
+
+        $(document).on('keyup', '#discount', function() {
+            var diskon = $('input#discount').val();
+            // var potongan = $('input#inputPotongan').val();
+            var total_pembayaran = 0;
+
+
+            total_pembayaran = parseInt(total_pembayaran) + parseInt(Total) - parseInt(diskon);
+
+            // console.log('kembalian', kembalian)
+            $('#total_pembayaran').val(total_pembayaran);
+            $('#total_pembayaran2').html(to_rupiah(total_pembayaran));
+
+        })
+        $('#total_transaksi').val(Total);
+        $('#total_transaksi2').html(to_rupiah(Total));
+
+        // $('#TotalOngkir').val(TotalOngkos);
+        //$('#TotalDiskon').val(TotalDiskon);
+
+        $('#terbilang').val(sayit(Total));
+
+
+    }
+
+	function to_rupiah(angka) {
+        var rev = parseInt(angka, 10).toString().split('').reverse().join('');
+        var rev2 = '';
+        for (var i = 0; i < rev.length; i++) {
+            rev2 += rev[i];
+            if ((i + 1) % 3 === 0 && i !== (rev.length - 1)) {
+                rev2 += '.';
+            }
+        }
+        return rev2.split('').reverse().join('');
+    }
+
+    var thoudelim = ".";
+    var decdelim = ",";
+    var curr = "Rp ";
+    var d = document;
+
+    function format(s, r) {
+        s = Math.round(s * Math.pow(10, r)) / Math.pow(10, r);
+        s = String(s);
+        s = s.split(".");
+        var l = s[0].length;
+        var t = "";
+        var c = 0;
+        while (l > 0) {
+            t = s[0][l - 1] + (c % 3 == 0 && c != 0 ? thoudelim : "") + t;
+            l--;
+            c++;
+        }
+        s[1] = s[1] == undefined ? "0" : s[1];
+        for (i = s[1].length; i < r; i++) {
+            s[1] += "0";
+        }
+        return curr + t + decdelim + s[1];
+    }
+
+    function threedigit(word) {
+        eja = Array("Nol", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan");
+        while (word.length < 3) word = "0" + word;
+        word = word.split("");
+        a = word[0];
+        b = word[1];
+        c = word[2];
+        word = "";
+        word += (a != "0" ? (a != "1" ? eja[parseInt(a)] : "Se") : "") + (a != "0" ? (a != "1" ? " Ratus" : "ratus") : "");
+        word += " " + (b != "0" ? (b != "1" ? eja[parseInt(b)] : "Se") : "") + (b != "0" ? (b != "1" ? " Puluh" : "puluh") : "");
+        word += " " + (c != "0" ? eja[parseInt(c)] : "");
+        word = word.replace(/Sepuluh ([^ ]+)/gi, "$1 Belas");
+        word = word.replace(/Satu Belas/gi, "Sebelas");
+        word = word.replace(/^[ ]+$/gi, "");
+
+        return word;
+    }
+
+    function sayit(s) {
+        var thousand = Array("", "Ribu", "Juta", "Milyar", "Trilyun");
+        s = Math.round(s * Math.pow(10, 2)) / Math.pow(10, 2);
+        s = String(s);
+        s = s.split(".");
+        var word = s[0];
+        var cent = s[1] ? s[1] : "0";
+        if (cent.length < 2) cent += "0";
+
+        var subword = "";
+        i = 0;
+        while (word.length > 3) {
+            subdigit = threedigit(word.substr(word.length - 3, 3));
+            subword = subdigit + (subdigit != "" ? " " + thousand[i] + " " : "") + subword;
+            word = word.substring(0, word.length - 3);
+            i++;
+        }
+        subword = threedigit(word) + " " + thousand[i] + " " + subword;
+        subword = subword.replace(/^ +$/gi, "");
+
+        word = (subword == "" ? "NOL" : subword.toUpperCase()) + " RUPIAH";
+        subword = threedigit(cent);
+        cent = (subword == "" ? "" : " ") + subword.toUpperCase() + (subword == "" ? "" : " SEN");
+        return word + cent;
+    }
 </script>
