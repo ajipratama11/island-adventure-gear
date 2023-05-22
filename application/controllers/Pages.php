@@ -14,6 +14,8 @@ class Pages extends CI_Controller {
 	{
 		$var['title'] = 'Home';
 		$var['product'] = $this->models->get_productHome();
+		$var['testimony'] = $this->models->get_testimony();
+		// var_dump($var['testimony']);die;
 		$this->load->view('pages/index', $var);
 	}
 
@@ -28,6 +30,14 @@ class Pages extends CI_Controller {
 		$var['title'] = 'Product';
 		$var['category'] = $this->models->get_category();
 		$this->load->view('pages/product', $var);
+	}
+
+	public function product_detail($category)
+	{
+		$var['title'] = 'Product';
+		$var['sub_category'] = $this->models->get_user_subCategory($category);
+		$var['product'] = $this->models->get_userProduct($category);
+		$this->load->view('pages/product2', $var);
 	}
 
 	public function blog()

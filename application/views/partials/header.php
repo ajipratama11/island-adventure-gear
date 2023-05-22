@@ -113,7 +113,7 @@
 	  <div class="sidebar-heading">
         Report
       </div>
-	  <li class="nav-item">
+	  <!-- <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseReport" aria-expanded="true"
           aria-controls="collapseReport">
           <i class="fas fa-fw fa-book"></i>
@@ -121,12 +121,11 @@
         </a>
         <div id="collapseReport" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <!-- <h6 class="collapse-header">Example Pages</h6> -->
             <a class="collapse-item" href="login.html">Monthly Report</a>
             <a class="collapse-item" href="register.html">Annual Report</a>
           </div>
         </div>
-      </li>
+      </li> -->
 	  <li class="nav-item">
         <a class="nav-link <?php if($title == 'Transaction Report') {echo 'active';} else {echo '';} ?>" href="<?= base_url('Admin/transaction_report') ?>">
           <i class="fas fa-fw fa-book"></i>
@@ -141,6 +140,12 @@
         <a class="nav-link <?php if(($title == 'Article') || ($title == 'Edit Article')) {echo 'active';} else {echo '';} ?>" href="<?= base_url('Admin/article') ?>">
           <i class="fas fa-fw fa-newspaper"></i>
           <span>Article</span>
+        </a>
+      </li>
+	  <li class="nav-item">
+        <a class="nav-link <?php if($title == 'Testimony') {echo 'active';} else {echo '';} ?>" href="<?= base_url('Admin/testimony') ?>">
+					<i class="fa-solid fa-quote-left"></i>
+          <span>Testimony</span>
         </a>
       </li>
     </ul>

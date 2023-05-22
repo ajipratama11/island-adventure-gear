@@ -21,7 +21,7 @@
 		</div>
 		<div class="row mt-3">
 			<?php foreach($category as $value) { ?>
-				<a href="" class="card category-item h-100 shadow">
+				<a href="<?= base_url('Pages/product_detail/' . $value->id) ?>" class="card category-item h-100 shadow">
 					<div class="card-header head-card-category">
 						<img src="<?= base_url('layouts/images/category/' . $value->image) ?>" width="250px" alt="">
 						<div class="category-info">

@@ -560,6 +560,84 @@ class M_admin extends CI_Model
 
 	public function get_productHome()
 	{
-		
+		$query = $this->db->query("SELECT * FROM product ORDER BY sold DESC limit 5")->result();
+		return $query;
+	}
+
+	public function get_testimony()
+	{
+		return $this->db->order_by('id', 'desc')->get('testimony')->result();
+	}
+
+	public function get_customer()
+	{
+		$query = $this->db->distinct()->select('name_customer')->from('transaction')->get()->result();
+		return $query;
+	}
+
+	public function save_testimony()
+	{
+		$post = $this->input->post();
+		$this->customer = $post['customer'];
+		$this->content_testimony = $post['content_testimony'];
+		$this->image = $this->upload_imageTesti();
+		$this->db->insert('testimony', $this);
+	}
+
+	public function update_testimony()
+	{
+		$post = $this->input->post();
+		$id = $post['id'];
+		$this->customer = $post['customer'];
+		$this->content_testimony = $post['content_testimony'];
+		if(!empty($post['image']) || !empty($post['old_image']))
+		{
+			if (!empty($_FILES["image"]["name"])) {
+				$this->image = $this->upload_imageTesti();
+			} else {
+				$this->image = $post["old_image"];
+			}
+		}
+		$this->db->update('testimony', $this, ['id' => $id]);
+	}
+
+	private function upload_imageTesti()
+	{
+		$config['upload_path']          = './layouts/images/article/';
+        $config['allowed_types']        = 'gif|jpg|png|jpeg';
+        $nama_lengkap = $_FILES['images']['name'];
+        $config['file_name']            = $nama_lengkap;
+        $config['overwrite']            = true;
+        $config['max_size']             = 3024;
+
+        $this->upload->initialize($config);
+        $this->load->library('upload', $config);
+
+        if ($this->upload->do_upload('images')) {
+            return $this->upload->data("file_name");
+        }
+        print_r($this->upload->display_errors());
+	}
+
+	public function get_user_subCategory($category)
+	{
+		$query = $this->db->select('sub_category.*, category.name_category')
+					->from('sub_category')
+					->join('category', 'sub_category.category_id = category.id')
+					->where('sub_category.category_id', $category)
+					->order_by('id', 'desc')
+					->get()->result();
+		return $query;
+	}
+
+	public function get_userProduct($category)
+	{
+		$query = $this->db->select('product.*, category.name_category')
+						->from('product')
+						->join('category', 'product.category_id = category.id')
+						->where('product.category_id', $category)
+						->order_by('product.id', 'desc')
+						->get()->result();
+		return $query;
 	}
 }

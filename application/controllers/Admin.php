@@ -839,4 +839,47 @@ class Admin extends CI_Controller {
 
 	}
 
+	public function testimony()
+	{
+		$var['title'] = 'Testimony';
+		$var['testimony'] = $this->models->get_testimony();
+		$var['customer'] = $this->models->get_customer();
+		$this->load->view('admin/menu/testimony', $var);
+	}
+
+	public function save_testimony()
+	{
+		var_dump('v');die;
+		$this->models->save_testimony();
+		$this->session->set_flashdata('success_insert', true);
+		redirect('Admin/testimony');
+	}
+
+	public function update_testimony()
+	{
+		$this->models->update_testimony();
+		$this->session->set_flashdata('success_update', true);
+		redirect('Admin/testimony');
+	}
+
+	public function delete_testimony($id)
+	{
+		$query = $this->db->get_where('testimony', ['id' => $id])->row();
+		if(!empty($query->image)) {
+			$this->delete_testimony_image($id);
+		}
+		$this->db->delete('testimony', ['id' => $id]);
+		$this->session->set_flashdata('success_delete', true);
+		redirect('Admin/testimony');
+	}
+
+	public function delete_testimony_image($id)
+	{
+		$images = $this->db->get_where('testimony', ['id' => $id])->row();
+        if ($images->images != "01.jpg") {
+            $filename = explode(".", $images->images)[0];
+            return array_map('unlink', glob(FCPATH . "/layouts/images/testimony/$filename.*"));
+        }
+	}
+
 }

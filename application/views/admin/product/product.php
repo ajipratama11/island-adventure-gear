@@ -71,7 +71,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<form action="<?= base_url('Admin/add_stock') ?>" method="post">
+				<form action="<?= base_url('Admin/add_stock') ?>" method="post" name="add_stock">
 					<div class="form-group">
 						<label for="exampleInputEmail1">Additional Stock</label>
 						<input type="hidden" id="id" name="id">
@@ -95,6 +95,23 @@
 			$('#id').val(id);
 		})
 
+		$(function() {
+			$("form[name='add_stock']").validate({
+				rules: {
+					stock: {
+						required: true
+					}
+				},
+				messages: {
+					stock: {
+						required: "stock is required (stock harus di isi)"
+					}
+				},
+				submitHandler: function(form) {
+					form.submit();
+				}
+			});
+    	});
 
 		$('.tombol-hapus').on('click', function(e) {
 			e.preventDefault();
