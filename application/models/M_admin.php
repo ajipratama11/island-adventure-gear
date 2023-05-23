@@ -560,7 +560,7 @@ class M_admin extends CI_Model
 
 	public function get_productHome()
 	{
-		$query = $this->db->query("SELECT * FROM product ORDER BY sold DESC limit 5")->result();
+		$query = $this->db->query("SELECT * FROM product ORDER BY sold DESC limit 3")->result();
 		return $query;
 	}
 
@@ -639,5 +639,10 @@ class M_admin extends CI_Model
 						->order_by('product.id', 'desc')
 						->get()->result();
 		return $query;
+	}
+
+	public function get_productPhoto2($id)
+	{
+		return $this->db->get_where('product_photo', ['product_id' => $id])->result();
 	}
 }

@@ -170,12 +170,16 @@
 					<div class="box">
 						<div class="option_container">
 							<div class="options">
-							<a href="" class="option1"><i class="fa fa-shopping-cart"></i>
-							Add To Cart
-							</a>
-							<a href="" class="option2"><i class="fa-brands fa-whatsapp"></i>
-							Buy Now
-							</a>
+								<a href="" class="option1"><i class="fa fa-shopping-cart"></i>
+									Add To Cart
+								</a>
+								<?php $pesan = 'I Want To Order Product (' . $value->product_name . ') From Website Island Adventure Gear'; ?>
+								<a href="https://wa.me/6281353012947?text=<?= $pesan ?>" class="option2"><i class="fa-brands fa-whatsapp"></i>
+									Buy Now
+								</a>
+								<a href="<?= base_url('Pages/product_show/' . $value->slug) ?>" class="option3"><i class="fa fa-eye"></i>
+									See Product
+								</a>
 							</div>
 						</div>
 						<div class="img-box">

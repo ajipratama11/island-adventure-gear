@@ -40,10 +40,26 @@ class Pages extends CI_Controller {
 		$this->load->view('pages/product2', $var);
 	}
 
+	public function product_show($slug)
+	{
+		$var['value'] = $this->db->get_where('product', ['slug' => $slug])->row();
+		$var['title'] = $var['value']->product_name;
+		$var['photo_product'] = $this->models->get_productPhoto2($var['value']->id);
+		$this->load->view('pages/product_show', $var);
+	}
+
 	public function blog()
 	{
 		$var['title'] = 'Blog';
+		$var['blog'] = $this->models->get_article();
 		$this->load->view('pages/blog', $var);
+	}
+
+	public function full_blog($slug)
+	{
+		$var['blog'] = $this->db->get_where('article', ['slug' => $slug])->row();
+		$var['title'] = $var['blog']->title;
+		$this->load->view('pages/fullpage_blog', $var);
 	}
 
 	public function cart()

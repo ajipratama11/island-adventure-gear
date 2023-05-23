@@ -14,55 +14,33 @@
 <section class="blog_section">
 	<div class="container">
 		<div class="row mt-5">
-			<div class="d-md-flex post-blog small-img">
-				<a href="" class="me-4 thumbnail">
-					<img src="<?= base_url() ?>layouts/images/test.png" class="img-fluid">
-				</a>
-				<div class="description">
-					<div class="post-meta">
-						<span class="category">Pendakian</span>
-						<span>|</span>
-						<span class="date">12 Juli 2023</span>
-					</div>
-					<h3>
-						<a href="" style="color: #000;">Apa yang harus diperhatikan dalam memulai pendakian ?</a>
-					</h3>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio placeat exercitationem magni voluptates dolore. Tenetur fugiat voluptates quas.</p>
-					<div class="d-flex align-items-center author">
-						<div class="photo">
-							<img src="<?= base_url() ?>layouts/images/user.png" alt="" class="img-fluid">
+			<?php foreach($blog as $value) { ?>
+				<div class="d-md-flex post-blog small-img">
+					<a href="<?= base_url('Pages/full_blog/' . $value->slug) ?>" class="me-4 thumbnail">
+						<img src="<?= base_url() ?>layouts/images/article/<?= $value->images ?>" class="img-fluid">
+					</a>
+					<div class="description">
+						<div class="post-meta">
+							<span class="category"><?= $value->topic_article ?></span>
+							<span>|</span>
+							<span class="date"><?= date('d-m-Y', strtotime($value->date)) ?></span>
 						</div>
-						<div class="name">
-							<h3 class="m-0 p-0">Admin</h3>
-						</div>
-					</div>
-				</div>
-			</div>
-			<hr>
-			<div class="d-md-flex post-blog small-img">
-				<a href="" class="me-4 thumbnail">
-					<img src="<?= base_url() ?>layouts/images/test.png" class="img-fluid">
-				</a>
-				<div class="description">
-					<div class="post-meta">
-						<span class="category">Pendakian</span>
-						<span>|</span>
-						<span class="date">12 Juli 2023</span>
-					</div>
-					<h3>
-						<a href="" style="color: #000;">Apa yang harus diperhatikan dalam memulai pendakian ?</a>
-					</h3>
-					<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio placeat exercitationem magni voluptates dolore. Tenetur fugiat voluptates quas.</p>
-					<div class="d-flex align-items-center author">
-						<div class="photo">
-							<img src="<?= base_url() ?>layouts/images/user.png" alt="" class="img-fluid">
-						</div>
-						<div class="name">
-							<h3 class="m-0 p-0">Admin</h3>
+						<h3>
+							<a href="<?= base_url('Pages/full_blog/' . $value->slug) ?>" style="color: #000;"><?= $value->title ?></a>
+						</h3>
+						<div><?= substr($value->description, 375, 600) ?>...</div>
+						<div class="d-flex align-items-center author">
+							<div class="photo">
+								<img src="<?= base_url() ?>layouts/images/user.png" alt="" class="img-fluid">
+							</div>
+							<div class="name">
+								<h3 class="m-0 p-0"><?= $value->author ?></h3>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+				<hr>
+			<?php } ?>
 		</div>
 	</div>
 </section>
