@@ -19,58 +19,91 @@
 			<table class="table table-striped table-cart">
 				<thead style="background-color: #0077b6; color: #FFF;">
 					<tr>
-						<th scope="col" width="5%"><input type="checkbox" title="to select all"></th>
-						<th scope="col" width="40%">Product Name</th>
-						<th scope="col" width="20%">Price </th>
-						<th scope="col" width="15%">Quantity</th>
-						<th scope="col" width="20%">Sub Totally</th>
+						<th scope="col" width="5%">No</th>
+						<th scope="col" width="55%">Product Name</th>
+						<th scope="col" width="20%">Price</th>
+						<th scope="col" width="20%">Action</th>
 
 					</tr>
 				</thead>
+				<?php
+					$duration = 1;
+					$this->db->query("DELETE FROM cart WHERE DATEDIFF(CURDATE(), date) > $duration");
+				 ?>
 				<tbody>
-					<tr>
-						<td><input type="checkbox"></td>
-						<td>
-							<div class="row">
-								<div class="col-3 img-product" style="background-image: url(<?= base_url('layouts/images/sepatu.png') ?>)"></div>
-								<div class="col-9">Sepatu Outdor Merk Bla Bla Impor Dari Mars</div>
-							</div>
-						</td>
-						<td>Rp. 500.000,00</td>
-						<td><input type="number" class="qty" name="qty" id="qty" value="1"></td>
-						<td>Rp. 500.000,00</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox"></td>
-						<td>
-							<div class="row">
-								<div class="col-3 img-product" style="background-image: url(<?= base_url('layouts/images/sepatu.png') ?>)"></div>
-								<div class="col-9">Sepatu Outdor Merk Bla Bla</div>
-							</div>
-						</td>
-						<td>Rp. 500.000,00</td>
-						<td><input type="number" class="qty" name="qty" id="qty" value="1"></td>
-						<td>Rp. 500.000,00</td>
-					</tr>
-					<tr>
-						<td><input type="checkbox"></td>
-						<td>
-							<div class="row">
-								<div class="col-3 img-product" style="background-image: url(<?= base_url('layouts/images/sepatu.png') ?>)"></div>
-								<div class="col-9">Sepatu Outdor Merk Bla Bla</div>
-							</div>
-						</td>
-						<td>Rp. 500.000,00</td>
-						<td><input type="number" class="qty" name="qty" id="qty" value="1"></td>
-						<td>Rp. 500.000,00</td>
-					</tr>
+					<?php $no = 1; 
+						foreach($cart as $value) { 
+							$data[] = [
+								'no' => $no,
+								'product' => $value->product_name
+							];
+						?>
+						<tr>
+							<td><?= $no++ ?></td>
+							<td>
+								<div class="row">
+									<div class="col-3 img-product" style="background-image: url(<?= base_url('layouts/images/product/' . $value->image) ?>)"></div>
+									<div class="col-9"><?= $value->product_name ?></div>
+								</div>
+							</td>
+							<td><?= 'Rp. ' . number_format($value->price,0,',','.') ?></td>
+							<td>
+								<a href="<?= base_url('Pages/delete_from_cart/' . $value->id) ?>" class="btn btn-danger tombol-hapus"><i class="fa fa-trash"></i> Delete</a>
+							</td>
+						</tr>
+					<?php } ?>
 				</tbody>
 			</table>
 			<div class="row button-order">
-				<a href="" class="btn btn-success"><i class="fa-brands fa-whatsapp"></i> Order Now</a>
+				<?php 
+				$pesan = 'I Want To Order Product : ';
+					foreach($data as $val) {
+						$pesan .= $val['no']. '. ' . $val['product'] .', ';
+					} 
+					$pesan .= 'From Website Island Adventure Gear';
+				?>
+				<a href="https://wa.me/6281353012947?text=<?= $pesan ?>" target="_blank" class="btn btn-success"><i class="fa-brands fa-whatsapp"></i> Order Now</a>
 			</div>
 		</div>
 	</div>
 </section>
 
 <?php $this->load->view('partials/footer_pages.php'); ?>
+<script>
+	$(".main_check").click(function(){
+    	$('input:checkbox').not(this).prop('checked', this.checked);
+	});	
+
+	$(document).ready(function() {
+		$('.tombol-hapus').on('click', function(e) {
+			e.preventDefault();
+			const link = $(this).attr('href');
+
+			Swal.fire({
+				title: 'Are You Sure ?',
+				text: "This product will be deleted!",
+				icon: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#d33',
+				cancelButtonColor: '#898989',
+				confirmButtonText: 'Delete!'
+			}).then((result) => {
+				if (result.isConfirmed) {
+					document.location.href = link;
+				}
+			})
+
+    	})
+	})
+
+	<?php if ($this->session->flashdata('delete_cart')) : ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'product in cart succesfully deleted!',
+            showConfirmButton: true,
+            // timer: 1500
+        })
+    <?php endif ?>
+</script>
+

@@ -54,6 +54,8 @@
 		<script src="<?= base_url() ?>layouts/pages/js/bootstrap.js"></script>
 		<!-- custom js -->
 		<script src="<?= base_url() ?>layouts/pages/js/custom.js"></script>
+
+		<script src="<?= base_url() ?>layouts/js/sweetalert2-all.js"></script>
 		<style type="text/css">
 			.floating {
 				position: fixed;

@@ -18,6 +18,7 @@
 		<link href="<?= base_url() ?>layouts/pages/css/font-awesome.min.css" rel="stylesheet" />
 		<!-- Custom styles for this template -->
 		<link href="<?= base_url() ?>layouts/pages/css/style.css" rel="stylesheet" />
+		<link href="<?= base_url() ?>layouts/pages/css/blog.css" rel="stylesheet" />
 		<!-- responsive style -->
 		<link href="<?= base_url() ?>layouts/pages/css/responsive.css" rel="stylesheet" />
 
@@ -51,9 +52,14 @@
 								<a class="nav-link" href="contact.html">Contact</a>
 							</li> -->
 							<li class="nav-item <?php if($title == "Cart") {echo "active";} else {echo "";} ?>">
+							<?php
+								$count_cart = $this->db->from('cart')->count_all_results()
+							?>
 							<a class="nav-link" href="<?= base_url('Pages/cart') ?>" style="display: inline-block; padding:2px; position:relativ;">
 								<i class="fa fa-shopping-cart"></i>
-								<div class="badge badge-primary" style="font-size: 10px; display: block; position: absolute; right:-5px; top:12px">3</div>
+								<?php if($count_cart != 0) { ?>
+									<div class="badge badge-primary" style="font-size: 10px; display: block; position: absolute; right:-5px; top:12px"><?= $count_cart ?></div>
+								<?php } ?>
 							</a>
 							</li>
 						</ul>

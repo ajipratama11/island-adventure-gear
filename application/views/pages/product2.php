@@ -64,11 +64,11 @@
 					<div class="box">
 						<div class="option_container">
 							<div class="options">
-								<a href="" class="option1"><i class="fa fa-shopping-cart"></i>
+								<a href="<?= base_url('Pages/add_to_chart/' . $value->id) ?>" class="option1"><i class="fa fa-shopping-cart"></i>
 									Add To Cart
 								</a>
 								<?php $pesan = 'I Want To Order Product (' . $value->product_name . ') From Website Island Adventure Gear'; ?>
-								<a href="https://wa.me/6281353012947?text=<?= $pesan ?>" class="option2"><i class="fa-brands fa-whatsapp"></i>
+								<a href="https://wa.me/6281353012947?text=<?= $pesan ?>" target="_blank" class="option2"><i class="fa-brands fa-whatsapp"></i>
 									Buy Now
 								</a>
 								<a href="<?= base_url('Pages/product_show/' . $value->slug) ?>" class="option3"><i class="fa fa-eye"></i>
@@ -105,3 +105,14 @@
 	</div>
 </section>
 <?php $this->load->view('partials/footer_pages.php'); ?>
+<script>
+	<?php if ($this->session->flashdata('success_add_cart')) : ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'successfully added to cart!',
+            showConfirmButton: true,
+            // timer: 1500
+        })
+    <?php endif ?>
+</script>

@@ -645,4 +645,14 @@ class M_admin extends CI_Model
 	{
 		return $this->db->get_where('product_photo', ['product_id' => $id])->result();
 	}
+
+	public function get_cart()
+	{
+		$query = $this->db->select('cart.*, product.product_name, product.price, product.price, product.image')
+						->from('cart')
+						->join('product', 'cart.product_id = product.id')
+						->order_by('cart.id', 'desc')
+						->get()->result();
+		return $query;
+	}
 }
