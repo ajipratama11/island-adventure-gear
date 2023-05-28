@@ -64,24 +64,51 @@ class Pages extends CI_Controller {
 		$this->load->view('pages/fullpage_blog', $var);
 	}
 
+	function getClientIP() {
+
+		if (isset($_SERVER)) {
+	
+			if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
+				return $_SERVER["HTTP_X_FORWARDED_FOR"];
+	
+			if (isset($_SERVER["HTTP_CLIENT_IP"]))
+				return $_SERVER["HTTP_CLIENT_IP"];
+	
+			return $_SERVER["REMOTE_ADDR"];
+		}
+	
+		if (getenv('HTTP_X_FORWARDED_FOR'))
+			return getenv('HTTP_X_FORWARDED_FOR');
+	
+		if (getenv('HTTP_CLIENT_IP'))
+			return getenv('HTTP_CLIENT_IP');
+	
+		return getenv('REMOTE_ADDR');
+	}
+
 	public function add_to_chart($id)
 	{
 		$product = $this->db->get_where('product', ['id' => $id])->row();
 		$category = $product->category_id;
+		$ip_address = $this->getClientIP();
+		// var_dump($ip_address);die;
 		$cart = [
 			'product_id' => $id,
-			'date'	=> date('Y-m-d')
+			'date'	=> date('Y-m-d'),
+			'ip_address' => $ip_address
 		];
 		$this->db->insert('cart', $cart);
 		$this->session->set_flashdata('success_add_cart', true);
 		redirect('pages/product_detail/' . $category);
 	}
 
-	public function add_to_cart2()
+	public function add_to_cart2($id)
 	{
+		$ip_address = $this->getClientIP();
 		$cart = [
 			'product_id' => $id,
-			'date'	=> date('Y-m-d')
+			'date'	=> date('Y-m-d'),
+			'ip_address' => $ip_address
 		];
 		$this->db->insert('cart', $cart);
 		$this->session->set_flashdata('success_add_cart', true);
@@ -91,7 +118,8 @@ class Pages extends CI_Controller {
 	public function cart()
 	{
 		$var['title'] = 'Cart';
-		$var['cart'] = $this->models->get_cart();
+		$ip_address = $this->getClientIP();
+		$var['cart'] = $this->models->get_cart($ip_address);
 		$this->load->view('pages/cart', $var);
 	}
 
@@ -100,6 +128,30 @@ class Pages extends CI_Controller {
 		$this->db->delete('cart', ['id' => $id]);
 		$this->session->set_flashdata('delete_cart', true);
 		redirect('pages/cart');
+	}
+
+	public function order()
+	{
+		if(empty($this->input->post('product_id'))) {
+			$this->session->set_flashdata('not_checklist', true);
+			redirect('pages/cart');
+		}
+		$no = 1;
+		$message = 'I Want To Order Product : ';
+		foreach($_POST['product_id'] as $key => $value) {
+			$product_id = $this->input->post('product_id')[$key];
+			$val = $this->db->get_where('product', ['id' => $product_id])->row();
+			$message .= $no++ . '. ' . $val->product_name .', ';
+		}
+
+		$message .= 'From Website Island Adventure Gear';
+
+		foreach($_POST['product_id'] as $key => $value) {
+			$pid = $this->input->post('product_id')[$key];
+			$this->db->delete('cart', ['id' => $pid]);
+		}
+
+		redirect('https://wa.me/6281353012947?text='. $message);
 	}
 
 }

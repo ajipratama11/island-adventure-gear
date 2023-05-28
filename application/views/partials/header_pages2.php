@@ -53,7 +53,30 @@
 							</li> -->
 							<li class="nav-item <?php if($title == "Cart") {echo "active";} else {echo "";} ?>">
 							<?php
-								$count_cart = $this->db->from('cart')->count_all_results()
+								function getClientIP() {
+
+									if (isset($_SERVER)) {
+								
+										if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
+											return $_SERVER["HTTP_X_FORWARDED_FOR"];
+								
+										if (isset($_SERVER["HTTP_CLIENT_IP"]))
+											return $_SERVER["HTTP_CLIENT_IP"];
+								
+										return $_SERVER["REMOTE_ADDR"];
+									}
+								
+									if (getenv('HTTP_X_FORWARDED_FOR'))
+										return getenv('HTTP_X_FORWARDED_FOR');
+								
+									if (getenv('HTTP_CLIENT_IP'))
+										return getenv('HTTP_CLIENT_IP');
+								
+									return getenv('REMOTE_ADDR');
+								}
+								$ip_address = getClientIP();
+								// var_dump($ip_address);
+								$count_cart = $this->db->from('cart')->where('ip_address', $ip_address)->count_all_results()
 							?>
 							<a class="nav-link" href="<?= base_url('Pages/cart') ?>" style="display: inline-block; padding:2px; position:relativ;">
 								<i class="fa fa-shopping-cart"></i>

@@ -132,17 +132,17 @@ class M_admin extends CI_Model
 		$pecahan_nama = explode(" ", $name[0]);
 		$kata = explode(" ", $name[0])[0];
 
-		$max_code = $this->db->query("SELECT max(product_code) as code FROM product")->row();
-		$query = $this->db->select('product_name')->from('product')->order_by('id', 'desc')->get()->row();
-		$product_nameLast = [strtoupper($query->product_name)];
-		$kataLast = explode(" ", $product_nameLast[0])[0];
-		$pecahKata = str_split($kataLast);
-		$jml_kataLast = count($pecahKata);
+		$max_code = $this->db->query("SELECT max(product_code) as code FROM product order by id desc")->row();
+		// $query = $this->db->select('product_name')->from('product')->order_by('id', 'desc')->get()->row();
+		// $product_nameLast = [strtoupper($query->product_name)];
+		// $kataLast = explode(" ", $product_nameLast[0])[0];
+		// $pecahKata = str_split($kataLast);
+		// $jml_kataLast = count($pecahKata);
 
 		$cek_code = $max_code->code;
-		$urutan = (int) substr($cek_code, $jml_kataLast, 3);
+		$urutan = (int) substr($cek_code, 7, 3);
 		$urutan++;
-		$product_code = $kata . sprintf("%03s", $urutan);
+		$product_code = 'PRODUCT' . sprintf("%03s", $urutan);
 		// var_dump($product_code);die;
 		
 		$post = $this->input->post();
@@ -646,11 +646,12 @@ class M_admin extends CI_Model
 		return $this->db->get_where('product_photo', ['product_id' => $id])->result();
 	}
 
-	public function get_cart()
+	public function get_cart($ip)
 	{
 		$query = $this->db->select('cart.*, product.product_name, product.price, product.price, product.image')
 						->from('cart')
 						->join('product', 'cart.product_id = product.id')
+						->where('cart.ip_address', $ip)
 						->order_by('cart.id', 'desc')
 						->get()->result();
 		return $query;
