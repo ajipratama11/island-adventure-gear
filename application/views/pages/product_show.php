@@ -77,7 +77,7 @@
 						</div>
 						<div class="button-order">
 							<?php $pesan = 'I Want To Order Product (' . $value->product_name . ') From Website Island Adventure Gear'; ?>
-							<a href="https://wa.me/6281353012947?text=<?= $pesan ?>" target="_blank" class="btn btn-success" style="margin-top: 10px; margin-left: 40%; margin-right: 10px; margin-bottom: 10px;"><i class="fa-brands fa-whatsapp"></i> Pesan Sekarang</a>
+							<a href="<?= base_url('Pages/order2/' . $value->id) ?>" target="_blank" class="btn btn-success" style="margin-top: 10px; margin-left: 40%; margin-right: 10px; margin-bottom: 10px;"><i class="fa-brands fa-whatsapp"></i> Pesan Sekarang</a>
 						</div>
 					</div>
 				</div>

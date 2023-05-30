@@ -142,9 +142,12 @@ class Pages extends CI_Controller {
 			$product_id = $this->input->post('product_id')[$key];
 			$val = $this->db->get_where('product', ['id' => $product_id])->row();
 			$message .= $no++ . '. ' . $val->product_name .', ';
+			$product[] = $val->product_name;
 		}
 
 		$message .= 'From Website Island Adventure Gear';
+
+		$this->send_email('cart', $product);
 
 		foreach($_POST['product_id'] as $key => $value) {
 			$pid = $this->input->post('product_id')[$key];
@@ -152,6 +155,125 @@ class Pages extends CI_Controller {
 		}
 
 		redirect('https://wa.me/6281353012947?text='. $message);
+	}
+
+	public function order2($id) 
+	{
+		$val = $this->db->get_where('product', ['id' => $id])->row();
+		$message = 'I Want To Order Product : ';
+		$message .= $no++ . '. ' . $val->product_name .', ';
+		$message .= 'From Website Island Adventure Gear';
+		$product = $val->product_name;
+
+		$this->send_email('non_cart', $product);
+		redirect('https://wa.me/6281353012947?text='. $message);
+	}
+
+	private function send_email($type, $product)
+	{
+		$email = 'ajip2606@gmail.com';
+		$no = 1;
+		$message = 'This is a list of orders:<br>';
+		$config = [
+            'protocol' => 'smtp',
+            'smtp_host' => 'ssl://smtp.googlemail.com',
+            'smtp_user' => 'islandadventuregear@gmail.com',
+            'smtp_pass' => 'iqnvhdijutfulhgc',
+            'smtp_port' => 465,
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'newline' => "\r\n"
+        ];
+        $this->load->library('email', $config);
+        $this->email->from('islandadventuregear@gmail.com', 'User Island Adventure Gear');
+
+        $this->email->to($email);
+		$this->email->subject('New Order From Website');
+		if($type == 'cart') {
+			foreach($product as $value) {
+				$message .= $no++ . '. ' . $value .'<br>';
+			}
+			$message .= 'Please check your whatsapp';
+			$this->email->message('
+			<!DOCTYPE html>
+				<html lang="en">
+				<head>
+					<meta charset="UTF-8">
+					<meta http-equiv="X-UA-Compatible" content="IE=edge">
+					<meta name="viewport" content="width=device-width, initial-scale=1.0">
+					<title>Received Order</title>
+					<style>
+						@import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
+					</style>
+				</head>
+				<body style="font-family: Rubik, sans-serif;">
+	
+					<div class="" style="border: 1px solid rgba(0,0,0,.125); padding: 10px 5px; padding-bottom: 20px; background-color: white">
+	
+						<div class="" style="text-align: center; margin-top: 20px;">
+							<img src="' . base_url('layouts/images/logo1.png') . '" alt="logo" width="250px" alt="">
+						</div>
+	
+						<div class="" style="text-align: center; margin-top: 20px;">
+							<h2><b> Here a new order </b></h2>
+							<label for="">'.$message.'</label>
+						</div>
+	
+					</div>
+	
+					<div class="" style="background: #0077b6; color: white; padding: 15px 10px; text-align: center;">
+						<small style="margin: 0px">© Copyright 2022 Island Adventure Gear.</small>
+					</div>
+	
+				</body>
+				</html>
+			');
+		} else if($type == 'non_cart') {
+			$message .= $product . '<br>';
+			$message .= 'Please check your whatsapp';
+			$this->email->message('
+			<!DOCTYPE html>
+				<html lang="en">
+				<head>
+					<meta charset="UTF-8">
+					<meta http-equiv="X-UA-Compatible" content="IE=edge">
+					<meta name="viewport" content="width=device-width, initial-scale=1.0">
+					<title>Received Order</title>
+					<style>
+						@import url("https://fonts.googleapis.com/css2?family=Rubik&display=swap");
+					</style>
+				</head>
+				<body style="font-family: Rubik, sans-serif;">
+	
+					<div class="" style="border: 1px solid rgba(0,0,0,.125); padding: 10px 5px; padding-bottom: 20px; background-color: white">
+	
+						<div class="" style="text-align: center; margin-top: 20px;">
+							<img src="' . base_url('layouts/images/logo1.png') . '" alt="logo" width="250px" alt="">
+						</div>
+	
+						<div class="" style="text-align: center; margin-top: 20px;">
+							<h2><b> Here a new order </b></h2>
+							<label for="">'.$message.'</label>
+						</div>
+	
+					</div>
+	
+					<div class="" style="background: #0077b6; color: white; padding: 15px 10px; text-align: center;">
+						<small style="margin: 0px">© Copyright 2022 Island Adventure Gear.</small>
+					</div>
+	
+				</body>
+				</html>
+			');
+		}
+
+		if ($this->email->send()) {
+            return true;
+        } else {
+            echo $this->email->print_debugger();
+            die;
+        }
+
 	}
 
 }

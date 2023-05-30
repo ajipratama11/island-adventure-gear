@@ -68,7 +68,7 @@
 									Add To Cart
 								</a>
 								<?php $pesan = 'I Want To Order Product (' . $value->product_name . ') From Website Island Adventure Gear'; ?>
-								<a href="https://wa.me/6281353012947?text=<?= $pesan ?>" target="_blank" class="option2"><i class="fa-brands fa-whatsapp"></i>
+								<a href="<?= base_url('Pages/order2/' . $value->id) ?>" target="_blank" class="option2"><i class="fa-brands fa-whatsapp"></i>
 									Buy Now
 								</a>
 								<a href="<?= base_url('Pages/product_show/' . $value->slug) ?>" class="option3"><i class="fa fa-eye"></i>
