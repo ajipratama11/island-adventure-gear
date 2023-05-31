@@ -7,6 +7,7 @@ class Pages extends CI_Controller {
     {
         parent::__construct();
 		// $this->load->model('M_pages', 'models');
+		$this->load->library('cart');
 		date_default_timezone_set('Asia/Jakarta');
 		$this->load->model('M_admin', 'models');
 	}
@@ -89,15 +90,27 @@ class Pages extends CI_Controller {
 	public function add_to_chart($id)
 	{
 		$product = $this->db->get_where('product', ['id' => $id])->row();
+		// var_dump($product->price);die;
 		$category = $product->category_id;
 		$ip_address = $this->getClientIP();
-		// var_dump($ip_address);die;
-		$cart = [
+		$cart =  array(
 			'product_id' => $id,
 			'date'	=> date('Y-m-d'),
 			'ip_address' => $ip_address
-		];
-		$this->db->insert('cart', $cart);
+		);
+		
+		$data = array(
+			'id'      => $id,
+			'qty'     => 1,
+			'price'   => $product->price,
+			'name'    => $product->product_name,
+			'product_options' => array(
+				'images' => $product->product_name
+			)
+		);
+		
+		$this->cart->insert($data);
+		// var_dump($this->cart->contents());die;
 		$this->session->set_flashdata('success_add_cart', true);
 		redirect('pages/product_detail/' . $category);
 	}
@@ -118,8 +131,9 @@ class Pages extends CI_Controller {
 	public function cart()
 	{
 		$var['title'] = 'Cart';
-		$ip_address = $this->getClientIP();
-		$var['cart'] = $this->models->get_cart($ip_address);
+		// $ip_address = $this->getClientIP();
+		$var['cart'] = $this->cart->contents();
+		// $var['cart'] = $this->models->get_product_by_id($id);
 		$this->load->view('pages/cart', $var);
 	}
 

@@ -656,4 +656,16 @@ class M_admin extends CI_Model
 						->get()->result();
 		return $query;
 	}
+
+	
+	public function get_product_by_id($id)
+	{
+		$query = $this->db->select('cart.*, product.product_name, product.price, product.price, product.image')
+						->from('cart')
+						->join('product', 'cart.product_id = product.id')
+						->where('cart.id', $id)
+						->order_by('cart.id', 'desc')
+						->get()->result();
+		return $query;
+	}
 }

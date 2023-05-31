@@ -49,6 +49,7 @@
 							<th scope="col" width="5%">No</th>
 							<th scope="col" width="5%">Checklist</th>
 							<th scope="col" width="50%">Product Name</th>
+							<th scope="col" width="10%">Qty</th>
 							<th scope="col" width="20%">Price</th>
 							<th scope="col" width="20%">Action</th>
 
@@ -60,28 +61,23 @@
 						$this->db->query("DELETE FROM cart WHERE DATEDIFF(CURDATE(), date) > $duration");
 						
 					?>
-					<tbody>
-						<?php $no = 1; 
+					<tbody> 
 						
-							foreach($cart as $value) { 
-								// $data[] = [
-								// 	'no' => $no,
-								// 	'product' => $value->product_name
-								// ];
-							?>
+							<?php foreach($cart as $value) { ?>
 							<tr>
-								<td><?= $no++ ?></td>
-								<td><input type="checkbox" name="product_id[]" value="<?= $value->product_id ?>"></td>
+								<!-- <td><?= $no++ ?></td>
+								<td><input type="checkbox" name="product_id[]" value="<?= $value->product_id ?>"></td> -->
 								<td>
 									<div class="row">
-										<div class="col-3 img-product" style="background-image: url(<?= base_url('layouts/images/product/' . $value->image) ?>)"></div>
-										<div class="col-9"><?= $value->product_name ?></div>
+										<!-- <div class="col-3 img-product" style="background-image: url(<?= base_url('layouts/images/product/' . $value->image) ?>)"></div> -->
+										<div class="col-9"><?= $value['name'] ?></div>
 									</div>
 								</td>
-								<td><?= 'Rp. ' . number_format($value->price,0,',','.') ?></td>
+								<td><?= $value['qty'] ?></td>
+								<!-- <td><?= 'Rp. ' . number_format($value->price,0,',','.') ?></td>
 								<td>
 									<a href="<?= base_url('Pages/delete_from_cart/' . $value->id) ?>" class="btn btn-danger tombol-hapus"><i class="fa fa-trash"></i> Delete</a>
-								</td>
+								</td> -->
 							</tr>
 						<?php } ?>
 					</tbody>
