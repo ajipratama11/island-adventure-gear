@@ -75,7 +75,8 @@
 								}
 								$ip_address = getClientIP();
 								// var_dump($ip_address);
-								$count_cart = $this->db->from('cart')->where('ip_address', $ip_address)->count_all_results()
+								// $count_cart = $this->db->from('cart')->where('ip_address', $ip_address)->count_all_results()
+								$count_cart = count( $this->cart->contents());
 							?>
 							<a class="nav-link" href="<?= base_url('Pages/cart') ?>" style="display: inline-block; padding:2px; position:relativ;">
 								<i class="fa fa-shopping-cart"></i>

@@ -63,21 +63,21 @@
 					?>
 					<tbody> 
 						
-							<?php foreach($cart as $value) { ?>
+							<?php $no = 1; foreach($cart as $value) { ?>
 							<tr>
-								<!-- <td><?= $no++ ?></td>
-								<td><input type="checkbox" name="product_id[]" value="<?= $value->product_id ?>"></td> -->
+								<td><?= $no++ ?></td>
+								<td><input type="checkbox" name="product_id[]" value="<?= $value['id'] ?>"></td>
 								<td>
 									<div class="row">
-										<!-- <div class="col-3 img-product" style="background-image: url(<?= base_url('layouts/images/product/' . $value->image) ?>)"></div> -->
+										<div class="col-3 img-product" style="background-image: url(<?= base_url('layouts/images/product/' . $value['product_options']['images']) ?>)"></div>
 										<div class="col-9"><?= $value['name'] ?></div>
 									</div>
 								</td>
 								<td><?= $value['qty'] ?></td>
-								<!-- <td><?= 'Rp. ' . number_format($value->price,0,',','.') ?></td>
+								<td><?= 'Rp. ' . number_format($value['price'],0,',','.') ?></td>
 								<td>
-									<a href="<?= base_url('Pages/delete_from_cart/' . $value->id) ?>" class="btn btn-danger tombol-hapus"><i class="fa fa-trash"></i> Delete</a>
-								</td> -->
+									<a href="<?= base_url('Pages/delete_from_cart/' . $value['rowid']) ?>" class="btn btn-danger btn-sm tombol-hapus"><i class="fa fa-trash"></i> Delete</a>
+								</td>
 							</tr>
 						<?php } ?>
 					</tbody>

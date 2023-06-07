@@ -92,12 +92,12 @@ class Pages extends CI_Controller {
 		$product = $this->db->get_where('product', ['id' => $id])->row();
 		// var_dump($product->price);die;
 		$category = $product->category_id;
-		$ip_address = $this->getClientIP();
-		$cart =  array(
-			'product_id' => $id,
-			'date'	=> date('Y-m-d'),
-			'ip_address' => $ip_address
-		);
+		// $ip_address = $this->getClientIP();
+		// $cart =  array(
+		// 	'product_id' => $id,
+		// 	'date'	=> date('Y-m-d'),
+		// 	'ip_address' => $ip_address
+		// );
 		
 		$data = array(
 			'id'      => $id,
@@ -105,7 +105,7 @@ class Pages extends CI_Controller {
 			'price'   => $product->price,
 			'name'    => $product->product_name,
 			'product_options' => array(
-				'images' => $product->product_name
+				'images' => $product->image
 			)
 		);
 		
@@ -117,13 +117,19 @@ class Pages extends CI_Controller {
 
 	public function add_to_cart2($id)
 	{
-		$ip_address = $this->getClientIP();
-		$cart = [
-			'product_id' => $id,
-			'date'	=> date('Y-m-d'),
-			'ip_address' => $ip_address
-		];
-		$this->db->insert('cart', $cart);
+		// $ip_address = $this->getClientIP();
+		$product = $this->db->get_where('product', ['id' => $id])->row();
+		$data = array(
+			'id'      => $id,
+			'qty'     => 1,
+			'price'   => $product->price,
+			'name'    => $product->product_name,
+			'product_options' => array(
+				'images' => $product->image
+			)
+		);
+		$this->cart->insert($data);
+		// $this->db->insert('cart', $cart);
 		$this->session->set_flashdata('success_add_cart', true);
 		redirect('pages');
 	}
@@ -133,13 +139,20 @@ class Pages extends CI_Controller {
 		$var['title'] = 'Cart';
 		// $ip_address = $this->getClientIP();
 		$var['cart'] = $this->cart->contents();
+		// var_dump($var['cart']);die;
 		// $var['cart'] = $this->models->get_product_by_id($id);
 		$this->load->view('pages/cart', $var);
 	}
 
 	public function delete_from_cart($id)
 	{
-		$this->db->delete('cart', ['id' => $id]);
+		// $this->db->delete('cart', ['id' => $id]);
+		$data = [
+			'rowid' => $id,
+			'qty' => 0,
+		];
+		// var_dump($data);die;
+		$this->cart->update($data);
 		$this->session->set_flashdata('delete_cart', true);
 		redirect('pages/cart');
 	}
