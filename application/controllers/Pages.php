@@ -168,8 +168,11 @@ class Pages extends CI_Controller {
 		foreach($_POST['product_id'] as $key => $value) {
 			$product_id = $this->input->post('product_id')[$key];
 			$val = $this->db->get_where('product', ['id' => $product_id])->row();
-			$message .= $no++ . '. ' . $val->product_name .', ';
-			$product[] = $val->product_name;
+			$message .= $no++ . '. ' . $val->product_name . ' (qty ' . $this->input->post('qty')[$key] . '), ';
+			$product[] = [
+				'product_name' 	=> $val->product_name,
+				'qty'			=> $this->input->post('qty')[$key],
+			];
 		}
 
 		$message .= 'From Website Island Adventure Gear';
@@ -188,7 +191,7 @@ class Pages extends CI_Controller {
 	{
 		$val = $this->db->get_where('product', ['id' => $id])->row();
 		$message = 'I Want To Order Product : ';
-		$message .= $no++ . '. ' . $val->product_name .', ';
+		$message .= $no++ . '. ' . $val->product_name .' (qty 1), ';
 		$message .= 'From Website Island Adventure Gear';
 		$product = $val->product_name;
 
@@ -198,7 +201,7 @@ class Pages extends CI_Controller {
 
 	private function send_email($type, $product)
 	{
-		$email = 'ajip2606@gmail.com';
+		$email = 'ardiyanramadhan4@gmail.com';
 		$no = 1;
 		$message = 'This is a list of orders:<br>';
 		$config = [
@@ -218,7 +221,7 @@ class Pages extends CI_Controller {
 		$this->email->subject('New Order From Website');
 		if($type == 'cart') {
 			foreach($product as $value) {
-				$message .= $no++ . '. ' . $value .'<br>';
+				$message .= $no++ . '. ' . $value['product_name'] . ' (qty '. $value['qty']. ')' .'<br>';
 			}
 			$message .= 'Please check your whatsapp';
 			$this->email->message('
@@ -256,7 +259,7 @@ class Pages extends CI_Controller {
 				</html>
 			');
 		} else if($type == 'non_cart') {
-			$message .= $product . '<br>';
+			$message .= $product .' (qty 1) <br>';
 			$message .= 'Please check your whatsapp';
 			$this->email->message('
 			<!DOCTYPE html>

@@ -73,7 +73,7 @@
 										<div class="col-9"><?= $value['name'] ?></div>
 									</div>
 								</td>
-								<td><?= $value['qty'] ?></td>
+								<td><?= $value['qty'] ?><input type="hidden" name="qty[]" value="<?= $value['qty'] ?>"></td>
 								<td><?= 'Rp. ' . number_format($value['price'],0,',','.') ?></td>
 								<td>
 									<a href="<?= base_url('Pages/delete_from_cart/' . $value['rowid']) ?>" class="btn btn-danger btn-sm tombol-hapus"><i class="fa fa-trash"></i> Delete</a>
