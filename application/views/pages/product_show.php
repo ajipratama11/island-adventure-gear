@@ -76,8 +76,8 @@
 							<?= $value->description ?>
 						</div>
 						<div class="button-order">
-							<?php $pesan = 'I Want To Order Product (' . $value->product_name . ') From Website Island Adventure Gear'; ?>
-							<a href="<?= base_url('Pages/order2/' . $value->id) ?>" target="_blank" class="btn btn-success" style="margin-top: 10px; margin-left: 40%; margin-right: 10px; margin-bottom: 10px;"><i class="fa-brands fa-whatsapp"></i> Pesan Sekarang</a>
+							<?php $pesan = 'I Want To Order Product (' . $value->product_name . ') From Website Island Adventure Gear'; $pages = 'pages/product_show/' . $value->slug; ?>
+							<a href="<?= base_url("Pages/order2?id=" . $value->id ."&hal=" . $pages) ?>" target="_blank" class="btn btn-success" style="margin-top: 10px; margin-left: 40%; margin-right: 10px; margin-bottom: 10px;"><i class="fa-brands fa-whatsapp"></i> Pesan Sekarang</a>
 						</div>
 					</div>
 				</div>
@@ -86,3 +86,14 @@
 	</div>
 </section>
 <?php $this->load->view('partials/footer_pages.php'); ?>
+<script>
+	<?php if ($this->session->flashdata('out_of_stock')) : ?>
+        Swal.fire({
+            icon: 'warning',
+            title: 'Notes!',
+            text: 'product stock is empty!',
+            showConfirmButton: true,
+            // timer: 1500
+        })
+    <?php endif ?>
+</script>

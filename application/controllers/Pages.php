@@ -92,6 +92,10 @@ class Pages extends CI_Controller {
 		$product = $this->db->get_where('product', ['id' => $id])->row();
 		// var_dump($product->price);die;
 		$category = $product->category_id;
+		if($product->stock == 0) {
+			$this->session->set_flashdata('out_of_stock', true);
+			redirect('pages/product_detail/' . $category);
+		}
 		// $ip_address = $this->getClientIP();
 		// $cart =  array(
 		// 	'product_id' => $id,
@@ -119,6 +123,10 @@ class Pages extends CI_Controller {
 	{
 		// $ip_address = $this->getClientIP();
 		$product = $this->db->get_where('product', ['id' => $id])->row();
+		if($product->stock == 0) {
+			$this->session->set_flashdata('out_of_stock', true);
+			redirect('pages');
+		}
 		$data = array(
 			'id'      => $id,
 			'qty'     => 1,
@@ -168,6 +176,7 @@ class Pages extends CI_Controller {
 		foreach($_POST['product_id'] as $key => $value) {
 			$product_id = $this->input->post('product_id')[$key];
 			$val = $this->db->get_where('product', ['id' => $product_id])->row();
+			// var_dump($val);die;
 			$message .= $no++ . '. ' . $val->product_name . ' (qty ' . $this->input->post('qty')[$key] . '), ';
 			$product[] = [
 				'product_name' 	=> $val->product_name,
@@ -187,9 +196,17 @@ class Pages extends CI_Controller {
 		redirect('https://wa.me/6281353012947?text='. $message);
 	}
 
-	public function order2($id) 
+	public function order2() 
 	{
+		$id = $this->input->get('id');
+		$pages = $this->input->get('hal');
 		$val = $this->db->get_where('product', ['id' => $id])->row();
+
+		if($val->stock == 0) {
+			$this->session->set_flashdata('out_of_stock', true);
+			redirect($pages);
+		}
+
 		$message = 'I Want To Order Product : ';
 		$message .= $no++ . '. ' . $val->product_name .' (qty 1), ';
 		$message .= 'From Website Island Adventure Gear';

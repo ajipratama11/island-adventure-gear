@@ -14,24 +14,37 @@
 </section>
 <!-- end inner page section -->
 <section class="arrival_section">
-	<div class="container">
-		<div class="box">
-			<div class="arrival_bg_box">
-				<img src="<?= base_url() ?>layouts/images/banner.png" alt="">
+	<div class="box">
+
+		<div class="row gy-4 mt-3">
+			<div class="col-lg-6 position-relative about-img" data-aos="fade-up" data-aos-delay="150">
+				<img src="<?= base_url('layouts/images/banner.png') ?>" style="width: 100%; height: 75%;">
 			</div>
-			<div class="row">
-				<div class="col-md-6 ml-auto">
+			<div class="col-lg-6 d-flex align-items-end" data-aos="fade-up" data-aos-delay="300">
+				<div class="content ps-0 ps-lg-5">
 					<div class="heading_container remove_line_bt">
 						<h2>
-							What's that Island Adventure Gear ?
+							Selamat datang di Island Adventure Gear
 						</h2>
 					</div>
 					<p style="margin-top: 20px;margin-bottom: 30px;">
-					Island Adventure Gear is a brand that provides outdoor activity equipment from Bali-Indonesia that meets various needs for equipment and equipment for the lifestyle of outdoor enthusiasts in tropical climates. To be the largest and most comprehensive supplier in BALI that can provide our customers' sports needs, especially today's adventure equipment
+					Island Adventure Gear, online shop untuk segala aktivitas outdoor dan perlengkapan petualangan! Toko kami menjual peralatan berkualitas untuk memenuhi kebutuhan petualangan Anda.
 					</p>
-					<!-- <a href="">
-						Shop Now
-					</a> -->
+					<p style="margin-top: 20px;margin-bottom: 30px;">
+				Di Island Adventure Gear, kami memahami serunya menjelajahi alam bebas dan pentingnya memiliki peralatan yang andal untuk menjadikan petualangan Anda tak terlupakan. Kami siap membantu untuk memenuhi kebutuhan perjalanan hiking, ataupun ekspedisi berkemah.
+					</p>
+					<p style="margin-top: 20px;margin-bottom: 30px;">
+					Kami menyediakan koleksi berbagai perlengkapan terbaik, termasuk sepatu hiking, tenda berkemah, ransel, peralatan olahraga air, dan banyak lagi. Kami memilih brand terbaik yang sudah sering di gunakan oleh pecinta olahraga outdoor dan petualangan.
+					</p>
+					<p style="margin-top: 20px;margin-bottom: 30px;">
+				Kami bangga tidak hanya menawarkan produk berkualitas tetapi juga mempunyai team yang siap membantu Anda menemukan perlengkapan yang sempurna untuk kebutuhan spesifik Anda. Apakah Anda seorang petualang berpengalaman atau baru, kami di sini siap untuk membantu.
+					</p>
+					<p style="margin-top: 20px;margin-bottom: 30px;">
+				Selamat berbelanja untuk perlengkapan terbaik yang sesuai dengan gaya hidup petualang Anda.
+					</p>
+					<p style="margin-top: 20px;margin-bottom: 30px;">
+			Terima kasih telah memilih Island Adventure Gear. Bersiaplah untuk merangkul hutan belantara dan memulai petualangan seumur hidup!
+					</p>
 				</div>
 			</div>
 		</div>

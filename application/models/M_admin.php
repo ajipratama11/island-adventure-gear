@@ -435,7 +435,7 @@ class M_admin extends CI_Model
 	{
 		$query = $this->db->from('transaction')
 						->where('date_trans >=', $start_date)
-						->where('date_trans <=', $start_date)
+						->where('date_trans <=', $end_date)
 						->count_all_results();
 		return $query;
 	}
@@ -451,7 +451,7 @@ class M_admin extends CI_Model
 	{
 		$query = $this->db->select('SUM(transaction_total) as total_transaction')
 						->where('date_trans >=', $start_date)
-						->where('date_trans <=', $start_date)
+						->where('date_trans <=', $end_date)
 						->get('transaction')->row()->total_transaction;
 		return $query;
 	}
@@ -467,7 +467,7 @@ class M_admin extends CI_Model
 	{
 		$query = $this->db->select('SUM(discount) as discount')
 						->where('date_trans >=', $start_date)
-						->where('date_trans <=', $start_date)
+						->where('date_trans <=', $end_date)
 						->get('transaction')->row()->discount;
 		return $query;
 	}
@@ -483,7 +483,7 @@ class M_admin extends CI_Model
 	{
 		$query = $this->db->select('SUM(totally_payment) as totally_payment')
 						->where('date_trans >=', $start_date)
-						->where('date_trans <=', $start_date)
+						->where('date_trans <=', $end_date)
 						->get('transaction')->row()->totally_payment;
 		return $query;
 	}
@@ -494,7 +494,7 @@ class M_admin extends CI_Model
 						->from('transaction')
 						->join('payment_methods', 'transaction.payment_methods_id = payment_methods.id')
 						->where('date_trans >=', $start_date)
-						->where('date_trans <=', $start_date)
+						->where('date_trans <=', $end_date)
 						->order_by('transaction.id', 'desc')
 						->get()->result();
 		return $query;

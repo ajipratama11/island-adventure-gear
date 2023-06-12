@@ -67,8 +67,8 @@
 								<a href="<?= base_url('Pages/add_to_chart/' . $value->id) ?>" class="option1"><i class="fa fa-shopping-cart"></i>
 									Add To Cart
 								</a>
-								<?php $pesan = 'I Want To Order Product (' . $value->product_name . ') From Website Island Adventure Gear'; ?>
-								<a href="<?= base_url('Pages/order2/' . $value->id) ?>" target="_blank" class="option2"><i class="fa-brands fa-whatsapp"></i>
+								<?php $pesan = 'I Want To Order Product (' . $value->product_name . ') From Website Island Adventure Gear'; $pages = 'pages/product_detail/' . $value->category_id; ?>
+								<a href="<?= base_url("Pages/order2?id=" . $value->id ."&hal=" . $pages) ?>" target="_blank" class="option2"><i class="fa-brands fa-whatsapp"></i>
 									Buy Now
 								</a>
 								<a href="<?= base_url('Pages/product_show/' . $value->slug) ?>" class="option3"><i class="fa fa-eye"></i>
@@ -111,6 +111,14 @@
             icon: 'success',
             title: 'Success!',
             text: 'successfully added to cart!',
+            showConfirmButton: true,
+            // timer: 1500
+        })
+	<?php elseif ($this->session->flashdata('out_of_stock')) : ?>
+        Swal.fire({
+            icon: 'warning',
+            title: 'Notes!',
+            text: 'product stock is empty!',
             showConfirmButton: true,
             // timer: 1500
         })
