@@ -22,7 +22,17 @@
 		<link href="<?= base_url() ?>layouts/pages/css/responsive.css" rel="stylesheet" />
 
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
+		<link rel="stylesheet" href="<?= base_url() ?>layouts/carousel/css/owl.carousel.min.css">
+    	<link rel="stylesheet" href="<?= base_url() ?>layouts/carousel/css/owl.theme.default.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/4.5.6/css/ionicons.min.css">
+		<link rel="stylesheet" href="<?= base_url() ?>layouts/carousel/css/style.css">
 	</head>
+	<style>
+	 .owl-carousel.home-slider .slider-item .slider-text {
+        height: 650px;
+        position: relative; }
+	</style>
 	<body>
 		<div class="hero_area">
 			<!-- header section strats -->
@@ -81,7 +91,7 @@
 							<a class="nav-link" href="<?= base_url('Pages/cart') ?>" style="display: inline-block; padding:2px; position:relativ;">
 								<i class="fa fa-shopping-cart"></i>
 								<?php if($count_cart != 0) { ?>
-									<div class="badge badge-primary" style="font-size: 10px; display: block; position: absolute; right:-5px; top:12px"><?= $count_cart ?></div>
+									<div class="badge badge-primary" style="font-size: 10px; display: block; position: absolute; right:0px; top:20px"><?= $count_cart ?></div>
 								<?php } ?>
 							</a>
 							</li>

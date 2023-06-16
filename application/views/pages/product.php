@@ -121,6 +121,7 @@
 
 .user-info > h2 {
   padding: 0;
+  font-size: 16px;
   margin: 10px 0;
 }
 

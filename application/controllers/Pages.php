@@ -177,9 +177,10 @@ class Pages extends CI_Controller {
 			$product_id = $this->input->post('product_id')[$key];
 			$val = $this->db->get_where('product', ['id' => $product_id])->row();
 			// var_dump($val);die;
-			$message .= $no++ . '. ' . $val->product_name . ' (qty ' . $this->input->post('qty')[$key] . '), ';
+			$message .= $no++ . '. ' . $val->product_name . ' (Harga: '. $val->price .')'. ' (qty ' . $this->input->post('qty')[$key] . '), ';
 			$product[] = [
 				'product_name' 	=> $val->product_name,
+				'price'			=> $val->price,
 				'qty'			=> $this->input->post('qty')[$key],
 			];
 		}
@@ -208,9 +209,9 @@ class Pages extends CI_Controller {
 		}
 
 		$message = 'I Want To Order Product : ';
-		$message .= $no++ . '. ' . $val->product_name .' (qty 1), ';
+		$message .= $no++ . '. ' . $val->product_name .' . (Harga: '. $val->price .') . (qty 1), ';
 		$message .= 'From Website Island Adventure Gear';
-		$product = $val->product_name;
+		$product = $val->product_name . ' (' . $val->price . ')';
 
 		$this->send_email('non_cart', $product);
 		redirect('https://wa.me/6281353012947?text='. $message);
@@ -238,7 +239,7 @@ class Pages extends CI_Controller {
 		$this->email->subject('New Order From Website');
 		if($type == 'cart') {
 			foreach($product as $value) {
-				$message .= $no++ . '. ' . $value['product_name'] . ' (qty '. $value['qty']. ')' .'<br>';
+				$message .= $no++ . '. ' . $value['product_name'] . ' (Harga: '. $value['price'] .')' . ' (qty '. $value['qty']. ')' .'<br>';
 			}
 			$message .= 'Please check your whatsapp';
 			$this->email->message('

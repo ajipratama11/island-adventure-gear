@@ -56,6 +56,12 @@
 		<script src="<?= base_url() ?>layouts/pages/js/custom.js"></script>
 
 		<script src="<?= base_url() ?>layouts/js/sweetalert2-all.js"></script>
+
+		<script src="<?= base_url() ?>layouts/carousel/js/jquery.min.js"></script>
+		<script src="<?= base_url() ?>layouts/carousel/js/popper.js"></script>
+		<script src="<?= base_url() ?>layouts/carousel/js/bootstrap.min.js"></script>
+		<script src="<?= base_url() ?>layouts/carousel/js/owl.carousel.min.js"></script>
+		<script src="<?= base_url() ?>layouts/carousel/js/main.js"></script>
 		<style type="text/css">
 			.floating {
 				position: fixed;
